@@ -75,8 +75,6 @@ jupyter notebook intro-agents-from-scratch.ipynb
 
 ## Important Notes
 
-- The notebook uses placeholder model names (e.g., "gpt-5-mini") in some examples. You may need to update these to valid model names like "gpt-4" or "gpt-3.5-turbo"
-- Some code cells contain intentional errors or placeholders for educational purposes
 - Files created during execution will be saved in your current working directory
 
 ## Files in This Repository
