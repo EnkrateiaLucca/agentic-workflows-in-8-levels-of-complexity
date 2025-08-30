@@ -1,0 +1,6621 @@
+{
+	"systeminfo": "WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : ARM_FMA = 1 | FP16_VA = 1 | MATMUL_INT8 = 1 | DOTPROD = 1 | ACCELERATE = 1 | AARCH64_REPACK = 1 | ",
+	"model": {
+		"type": "base",
+		"multilingual": false,
+		"vocab": 51864,
+		"audio": {
+			"ctx": 1500,
+			"state": 512,
+			"head": 8,
+			"layer": 6
+		},
+		"text": {
+			"ctx": 448,
+			"state": 512,
+			"head": 8,
+			"layer": 6
+		},
+		"mels": 80,
+		"ftype": 1
+	},
+	"params": {
+		"model": "/Users/greatmaster/Desktop/projects/learning/audio-transcription-fast/whisper.cpp/models/ggml-base.en.bin",
+		"language": "en",
+		"translate": false
+	},
+	"result": {
+		"language": "en"
+	},
+	"transcription": [
+		{
+			"timestamps": {
+				"from": "00:00:00,000",
+				"to": "00:00:02,200"
+			},
+			"offsets": {
+				"from": 0,
+				"to": 2200
+			},
+			"text": " what's up folks. In this video, we're going to talk about"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:02,200",
+				"to": "00:00:05,920"
+			},
+			"offsets": {
+				"from": 2200,
+				"to": 5920
+			},
+			"text": " building agent workflows in eight levels of complexity. This is a"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:05,920",
+				"to": "00:00:09,760"
+			},
+			"offsets": {
+				"from": 5920,
+				"to": 9760
+			},
+			"text": " follow up to one of my best videos from my channel, called"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:09,760",
+				"to": "00:00:12,720"
+			},
+			"offsets": {
+				"from": 9760,
+				"to": 12720
+			},
+			"text": " building agents in three levels of complexity. And today, we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:12,720",
+				"to": "00:00:16,680"
+			},
+			"offsets": {
+				"from": 12720,
+				"to": 16680
+			},
+			"text": " going to talk about how to go from a simple LMM call, all the way"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:16,680",
+				"to": "00:00:20,720"
+			},
+			"offsets": {
+				"from": 16680,
+				"to": 20720
+			},
+			"text": " up to an agent workflow that uses an agent as a step. We're going"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:20,720",
+				"to": "00:00:24,560"
+			},
+			"offsets": {
+				"from": 20720,
+				"to": 24560
+			},
+			"text": " to talk through the papers and the a little bit of the theory in a"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:24,560",
+				"to": "00:00:27,000"
+			},
+			"offsets": {
+				"from": 24560,
+				"to": 27000
+			},
+			"text": " lot of the practice, right? Everything is going to be from"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:27,000",
+				"to": "00:00:30,200"
+			},
+			"offsets": {
+				"from": 27000,
+				"to": 30200
+			},
+			"text": " scratch. Meaning we are they're going to use the basic and lame"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:30,200",
+				"to": "00:00:33,440"
+			},
+			"offsets": {
+				"from": 30200,
+				"to": 33440
+			},
+			"text": " APIs, or we're just going to build stuff ourselves in pure"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:33,440",
+				"to": "00:00:37,120"
+			},
+			"offsets": {
+				"from": 33440,
+				"to": 37120
+			},
+			"text": " Python. All right. So we're going to start easy, we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:37,120",
+				"to": "00:00:42,480"
+			},
+			"offsets": {
+				"from": 37120,
+				"to": 42480
+			},
+			"text": " set up our environment variable for open API key. And we're going"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:42,480",
+				"to": "00:00:46,240"
+			},
+			"offsets": {
+				"from": 42480,
+				"to": 46240
+			},
+			"text": " to run this. And now we're going to basically just write a"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:46,240",
+				"to": "00:00:48,760"
+			},
+			"offsets": {
+				"from": 46240,
+				"to": 48760
+			},
+			"text": " simple LMM call. And that's super easy, right? We just have"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:48,760",
+				"to": "00:00:52,880"
+			},
+			"offsets": {
+				"from": 48760,
+				"to": 52880
+			},
+			"text": " to import the open API, set up our client. And then we're going"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:52,880",
+				"to": "00:00:56,200"
+			},
+			"offsets": {
+				"from": 52880,
+				"to": 56200
+			},
+			"text": " to write a little function. And I'm going to name the functions"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:56,240",
+				"to": "00:00:59,040"
+			},
+			"offsets": {
+				"from": 56240,
+				"to": 59040
+			},
+			"text": " like level one, level two, level three to like organize our"
+		},
+		{
+			"timestamps": {
+				"from": "00:00:59,040",
+				"to": "00:01:04,120"
+			},
+			"offsets": {
+				"from": 59040,
+				"to": 64120
+			},
+			"text": " thoughts. And the first one's called level one. And it's the"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:04,120",
+				"to": "00:01:08,640"
+			},
+			"offsets": {
+				"from": 64120,
+				"to": 68640
+			},
+			"text": " basic LMM call, which essentially just calls the responses API"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:08,640",
+				"to": "00:01:12,840"
+			},
+			"offsets": {
+				"from": 68640,
+				"to": 72840
+			},
+			"text": " from open AI, uses the GPT five mini model, sends a simple"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:12,840",
+				"to": "00:01:17,440"
+			},
+			"offsets": {
+				"from": 72840,
+				"to": 77440
+			},
+			"text": " prompt and gets a response back. Pretty basic. So now we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:17,440",
+				"to": "00:01:20,640"
+			},
+			"offsets": {
+				"from": 77440,
+				"to": 80640
+			},
+			"text": " going to call it like what is an agent workflow. And when we"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:20,640",
+				"to": "00:01:23,960"
+			},
+			"offsets": {
+				"from": 80640,
+				"to": 83960
+			},
+			"text": " run it, we'll take a few seconds. And we'll just provide us with"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:23,960",
+				"to": "00:01:27,920"
+			},
+			"offsets": {
+				"from": 83960,
+				"to": 87920
+			},
+			"text": " the response, pretty basic simple stuff. We specify the model,"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:27,920",
+				"to": "00:01:31,240"
+			},
+			"offsets": {
+				"from": 87920,
+				"to": 91240
+			},
+			"text": " the input, and that's it. Right, we can use this to do things"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:31,240",
+				"to": "00:01:35,240"
+			},
+			"offsets": {
+				"from": 91240,
+				"to": 95240
+			},
+			"text": " like summarize, extract a little bit of information. And we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:35,240",
+				"to": "00:01:40,960"
+			},
+			"offsets": {
+				"from": 95240,
+				"to": 100960
+			},
+			"text": " limited by the prompting mechanics of the specific API. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:40,960",
+				"to": "00:01:43,440"
+			},
+			"offsets": {
+				"from": 100960,
+				"to": 103440
+			},
+			"text": " we're just going to prompt and give responses back. So it's"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:43,440",
+				"to": "00:01:48,960"
+			},
+			"offsets": {
+				"from": 103440,
+				"to": 108960
+			},
+			"text": " text goes in, text comes out. Okay, great. However, now when we"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:48,960",
+				"to": "00:01:52,520"
+			},
+			"offsets": {
+				"from": 108960,
+				"to": 112520
+			},
+			"text": " go to level two, now we can start thinking about how can we"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:52,520",
+				"to": "00:01:55,360"
+			},
+			"offsets": {
+				"from": 112520,
+				"to": 115360
+			},
+			"text": " chain these LMM costs to make something a little bit more"
+		},
+		{
+			"timestamps": {
+				"from": "00:01:55,360",
+				"to": "00:02:00,160"
+			},
+			"offsets": {
+				"from": 115360,
+				"to": 120160
+			},
+			"text": " powerful, right? And a very cool resource for this topic is"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:00,160",
+				"to": "00:02:04,320"
+			},
+			"offsets": {
+				"from": 120160,
+				"to": 124320
+			},
+			"text": " building effective agents by anthropic, where they talk about"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:04,320",
+				"to": "00:02:08,040"
+			},
+			"offsets": {
+				"from": 124320,
+				"to": 128040
+			},
+			"text": " workflow agents went to use them, how they work, and they go"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:08,040",
+				"to": "00:02:11,600"
+			},
+			"offsets": {
+				"from": 128040,
+				"to": 131600
+			},
+			"text": " from scratch. And this article definitely inspired my desire"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:11,600",
+				"to": "00:02:15,160"
+			},
+			"offsets": {
+				"from": 131600,
+				"to": 135160
+			},
+			"text": " to do this video that I'm doing right now. So go check it out."
+		},
+		{
+			"timestamps": {
+				"from": "00:02:15,160",
+				"to": "00:02:19,520"
+			},
+			"offsets": {
+				"from": 135160,
+				"to": 139520
+			},
+			"text": " All right, so chaining LMM calls is super easy. All we got to"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:19,520",
+				"to": "00:02:22,000"
+			},
+			"offsets": {
+				"from": 139520,
+				"to": 142000
+			},
+			"text": " do is essentially what we're going to do is we're going to set"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:22,000",
+				"to": "00:02:26,240"
+			},
+			"offsets": {
+				"from": 142000,
+				"to": 146240
+			},
+			"text": " up a function that does the LLM call, so takes in some input"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:26,240",
+				"to": "00:02:31,400"
+			},
+			"offsets": {
+				"from": 146240,
+				"to": 151400
+			},
+			"text": " and provides some output. And this calls the opening API like we"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:31,400",
+				"to": "00:02:36,000"
+			},
+			"offsets": {
+				"from": 151400,
+				"to": 156000
+			},
+			"text": " did before, use the GPT five mini model and sends a prompt and"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:36,000",
+				"to": "00:02:40,840"
+			},
+			"offsets": {
+				"from": 156000,
+				"to": 160840
+			},
+			"text": " gets a response back easy. However, the level true is all"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:40,840",
+				"to": "00:02:45,800"
+			},
+			"offsets": {
+				"from": 160840,
+				"to": 165800
+			},
+			"text": " about chaining as many LLM calls as we want. So for that, what"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:45,800",
+				"to": "00:02:48,200"
+			},
+			"offsets": {
+				"from": 165800,
+				"to": 168200
+			},
+			"text": " we're going to do is we're going to take we're going to start"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:48,200",
+				"to": "00:02:51,640"
+			},
+			"offsets": {
+				"from": 168200,
+				"to": 171640
+			},
+			"text": " with an input in a list of prompts that we want to chain"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:51,640",
+				"to": "00:02:55,120"
+			},
+			"offsets": {
+				"from": 171640,
+				"to": 175120
+			},
+			"text": " together. Then what we're going to do is we're going to loop"
+		},
+		{
+			"timestamps": {
+				"from": "00:02:55,120",
+				"to": "00:03:00,760"
+			},
+			"offsets": {
+				"from": 175120,
+				"to": 180760
+			},
+			"text": " over these prompts. And for each prompt, we're going to take a"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:00,760",
+				"to": "00:03:05,520"
+			},
+			"offsets": {
+				"from": 180760,
+				"to": 185520
+			},
+			"text": " result of calling the making a call to the LLM call function"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:05,520",
+				"to": "00:03:10,960"
+			},
+			"offsets": {
+				"from": 185520,
+				"to": 190960
+			},
+			"text": " with that prompt on and save the result as an input for the"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:10,960",
+				"to": "00:03:14,560"
+			},
+			"offsets": {
+				"from": 190960,
+				"to": 194560
+			},
+			"text": " next call. So that means that we start with the result as the"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:14,560",
+				"to": "00:03:19,080"
+			},
+			"offsets": {
+				"from": 194560,
+				"to": 199080
+			},
+			"text": " input, right? And then we call the first prompt. And then the"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:19,080",
+				"to": "00:03:22,840"
+			},
+			"offsets": {
+				"from": 199080,
+				"to": 202840
+			},
+			"text": " next one is going to take in the result of the previous one as"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:22,840",
+				"to": "00:03:26,080"
+			},
+			"offsets": {
+				"from": 202840,
+				"to": 206080
+			},
+			"text": " the input for the next. And we're going to do that for as many"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:26,080",
+				"to": "00:03:28,640"
+			},
+			"offsets": {
+				"from": 206080,
+				"to": 208640
+			},
+			"text": " prompts as we have on the list of prompts that we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:28,640",
+				"to": "00:03:31,440"
+			},
+			"offsets": {
+				"from": 208640,
+				"to": 211440
+			},
+			"text": " give this function as an input. And then we're going to print"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:31,440",
+				"to": "00:03:35,400"
+			},
+			"offsets": {
+				"from": 211440,
+				"to": 215400
+			},
+			"text": " that out. And that's pretty much what it is. And for the"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:35,400",
+				"to": "00:03:38,680"
+			},
+			"offsets": {
+				"from": 215400,
+				"to": 218680
+			},
+			"text": " example usage, I'm putting here an input topic like a Gentic"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:38,680",
+				"to": "00:03:41,640"
+			},
+			"offsets": {
+				"from": 218680,
+				"to": 221640
+			},
+			"text": " workflow. And then the prompt is first, we're going to create a"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:41,640",
+				"to": "00:03:44,600"
+			},
+			"offsets": {
+				"from": 221640,
+				"to": 224600
+			},
+			"text": " three bullet point essay plan for this topic. And then we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:44,600",
+				"to": "00:03:48,040"
+			},
+			"offsets": {
+				"from": 224600,
+				"to": 228040
+			},
+			"text": " going to write the essay following the plan strictly. All"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:48,040",
+				"to": "00:03:54,000"
+			},
+			"offsets": {
+				"from": 228040,
+				"to": 234000
+			},
+			"text": " right. And when we call this, right, so I can call it with the"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:54,000",
+				"to": "00:03:58,520"
+			},
+			"offsets": {
+				"from": 234000,
+				"to": 238520
+			},
+			"text": " input and the list of prompts, this is what happens. So what"
+		},
+		{
+			"timestamps": {
+				"from": "00:03:58,520",
+				"to": "00:04:00,440"
+			},
+			"offsets": {
+				"from": 238520,
+				"to": 240440
+			},
+			"text": " we're going to see is that first, we're going to see the"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:00,440",
+				"to": "00:04:03,240"
+			},
+			"offsets": {
+				"from": 240440,
+				"to": 243240
+			},
+			"text": " output of the first call to the LLM, which essentially is going"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:03,240",
+				"to": "00:04:06,720"
+			},
+			"offsets": {
+				"from": 243240,
+				"to": 246720
+			},
+			"text": " to create a plan for the essay. And then the second one is going"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:06,720",
+				"to": "00:04:10,080"
+			},
+			"offsets": {
+				"from": 246720,
+				"to": 250080
+			},
+			"text": " to write the essay following the structure from the previous"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:10,400",
+				"to": "00:04:14,440"
+			},
+			"offsets": {
+				"from": 250400,
+				"to": 254440
+			},
+			"text": " output. So the essay that we're going to write now is going to be"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:14,440",
+				"to": "00:04:20,120"
+			},
+			"offsets": {
+				"from": 254440,
+				"to": 260120
+			},
+			"text": " based on this essay plan. So it's going to be like defining the"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:20,120",
+				"to": "00:04:23,080"
+			},
+			"offsets": {
+				"from": 260120,
+				"to": 263080
+			},
+			"text": " scope and then arguing the benefits and then examining the"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:23,080",
+				"to": "00:04:28,760"
+			},
+			"offsets": {
+				"from": 263080,
+				"to": 268760
+			},
+			"text": " challenges. So that's pretty much all it's going to do. So we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:28,760",
+				"to": "00:04:30,920"
+			},
+			"offsets": {
+				"from": 268760,
+				"to": 270920
+			},
+			"text": " going to wait a few seconds. I'm probably going to skip this."
+		},
+		{
+			"timestamps": {
+				"from": "00:04:40,400",
+				"to": "00:04:48,840"
+			},
+			"offsets": {
+				"from": 280400,
+				"to": 288840
+			},
+			"text": " Perfect. So now we can see that the first output was the plan"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:48,840",
+				"to": "00:04:52,560"
+			},
+			"offsets": {
+				"from": 288840,
+				"to": 292560
+			},
+			"text": " and the second output was the actual essay. So our chaining"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:52,560",
+				"to": "00:04:56,440"
+			},
+			"offsets": {
+				"from": 292560,
+				"to": 296440
+			},
+			"text": " works. And we can do this for all sorts of lists of prompts"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:56,440",
+				"to": "00:04:59,600"
+			},
+			"offsets": {
+				"from": 296440,
+				"to": 299600
+			},
+			"text": " for whatever workflow we're trying to build. All right. Now,"
+		},
+		{
+			"timestamps": {
+				"from": "00:04:59,600",
+				"to": "00:05:02,600"
+			},
+			"offsets": {
+				"from": 299600,
+				"to": 302600
+			},
+			"text": " number three starts to get interesting because we start"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:02,600",
+				"to": "00:05:06,680"
+			},
+			"offsets": {
+				"from": 302600,
+				"to": 306680
+			},
+			"text": " routing at a LEM calls. So routing essentially means this."
+		},
+		{
+			"timestamps": {
+				"from": "00:05:06,680",
+				"to": "00:05:09,520"
+			},
+			"offsets": {
+				"from": 306680,
+				"to": 309520
+			},
+			"text": " If we go back to the building effective agents and we go to the"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:09,520",
+				"to": "00:05:10,960"
+			},
+			"offsets": {
+				"from": 309520,
+				"to": 310960
+			},
+			"text": " router pattern section."
+		},
+		{
+			"timestamps": {
+				"from": "00:05:10,960",
+				"to": "00:05:19,240"
+			},
+			"offsets": {
+				"from": 310960,
+				"to": 319240
+			},
+			"text": " Router here, we go here, we get augmented chaining, there"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:19,240",
+				"to": "00:05:23,640"
+			},
+			"offsets": {
+				"from": 319240,
+				"to": 323640
+			},
+			"text": " you go, routing. So here we have an LLM first. And what the LLM"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:23,640",
+				"to": "00:05:29,200"
+			},
+			"offsets": {
+				"from": 323640,
+				"to": 329200
+			},
+			"text": " is going to do is going to route the input to one of as many as"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:29,200",
+				"to": "00:05:34,240"
+			},
+			"offsets": {
+				"from": 329200,
+				"to": 334240
+			},
+			"text": " we want LLMs, not as many as we want, but like to one of X"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:34,240",
+				"to": "00:05:38,680"
+			},
+			"offsets": {
+				"from": 334240,
+				"to": 338680
+			},
+			"text": " LLMs. And one of those LLMs is going to take in the input. It's"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:38,680",
+				"to": "00:05:43,080"
+			},
+			"offsets": {
+				"from": 338680,
+				"to": 343080
+			},
+			"text": " going to provide us with an output as simple as that. So to do"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:43,080",
+				"to": "00:05:47,200"
+			},
+			"offsets": {
+				"from": 343080,
+				"to": 347200
+			},
+			"text": " that, all we got to do is we set up a little dictionary that's"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:47,200",
+				"to": "00:05:52,840"
+			},
+			"offsets": {
+				"from": 347200,
+				"to": 352840
+			},
+			"text": " going to contain a tag that indicates what is the selected"
+		},
+		{
+			"timestamps": {
+				"from": "00:05:52,840",
+				"to": "00:06:00,040"
+			},
+			"offsets": {
+				"from": 352840,
+				"to": 360040
+			},
+			"text": " prompt for the LLM that has been routed. And in this case, I"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:00,040",
+				"to": "00:06:03,720"
+			},
+			"offsets": {
+				"from": 360040,
+				"to": 363720
+			},
+			"text": " have two simple tags, two simple classifications, right? We"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:03,720",
+				"to": "00:06:07,800"
+			},
+			"offsets": {
+				"from": 363720,
+				"to": 367800
+			},
+			"text": " have a coding prompt and a math prompt. So if the router"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:07,800",
+				"to": "00:06:12,240"
+			},
+			"offsets": {
+				"from": 367800,
+				"to": 372240
+			},
+			"text": " identifies that the input is related to coding, the router is"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:12,240",
+				"to": "00:06:16,680"
+			},
+			"offsets": {
+				"from": 372240,
+				"to": 376680
+			},
+			"text": " going to output something that can be parsed as coding. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:16,680",
+				"to": "00:06:19,840"
+			},
+			"offsets": {
+				"from": 376680,
+				"to": 379840
+			},
+			"text": " then we're going to, the prompt is going to be take this coding"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:19,840",
+				"to": "00:06:23,240"
+			},
+			"offsets": {
+				"from": 379840,
+				"to": 383240
+			},
+			"text": " problem and produce a solution invite. So essentially, if the"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:23,240",
+				"to": "00:06:26,040"
+			},
+			"offsets": {
+				"from": 383240,
+				"to": 386040
+			},
+			"text": " input is a coding problem or something related to producing"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:26,040",
+				"to": "00:06:32,240"
+			},
+			"offsets": {
+				"from": 386040,
+				"to": 392240
+			},
+			"text": " code, the the router is going to output coding. And if the"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:32,240",
+				"to": "00:06:35,120"
+			},
+			"offsets": {
+				"from": 392240,
+				"to": 395120
+			},
+			"text": " problems that are math, the router is going to output math."
+		},
+		{
+			"timestamps": {
+				"from": "00:06:35,120",
+				"to": "00:06:38,000"
+			},
+			"offsets": {
+				"from": 395120,
+				"to": 398000
+			},
+			"text": " That's pretty much all it does. Obviously, it could be a little"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:38,000",
+				"to": "00:06:41,880"
+			},
+			"offsets": {
+				"from": 398000,
+				"to": 401880
+			},
+			"text": " bit smarter input here, something like if none of these"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:41,880",
+				"to": "00:06:46,000"
+			},
+			"offsets": {
+				"from": 401880,
+				"to": 406000
+			},
+			"text": " topics are like, if the input is not about any of these topics,"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:46,000",
+				"to": "00:06:50,200"
+			},
+			"offsets": {
+				"from": 406000,
+				"to": 410200
+			},
+			"text": " we can produce an output like default, like none or something"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:50,200",
+				"to": "00:06:54,200"
+			},
+			"offsets": {
+				"from": 410200,
+				"to": 414200
+			},
+			"text": " like that, but we don't really need to do that. So now level"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:54,200",
+				"to": "00:06:58,240"
+			},
+			"offsets": {
+				"from": 414200,
+				"to": 418240
+			},
+			"text": " three, which is routing is going to take in some input in this"
+		},
+		{
+			"timestamps": {
+				"from": "00:06:58,240",
+				"to": "00:07:03,200"
+			},
+			"offsets": {
+				"from": 418240,
+				"to": 423200
+			},
+			"text": " dictionary containing the coding and the math prompts. And now"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:03,200",
+				"to": "00:07:05,640"
+			},
+			"offsets": {
+				"from": 423200,
+				"to": 425640
+			},
+			"text": " we're going to write a little selector prompt, which is going"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:05,640",
+				"to": "00:07:08,480"
+			},
+			"offsets": {
+				"from": 425640,
+				"to": 428480
+			},
+			"text": " to say, analyze the input and classify it as one of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:08,480",
+				"to": "00:07:12,560"
+			},
+			"offsets": {
+				"from": 428480,
+				"to": 432560
+			},
+			"text": " following categories. Then we're going to list the router keys,"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:12,560",
+				"to": "00:07:17,680"
+			},
+			"offsets": {
+				"from": 432560,
+				"to": 437680
+			},
+			"text": " right, the keys from this dictionary. So coding and math."
+		},
+		{
+			"timestamps": {
+				"from": "00:07:17,680",
+				"to": "00:07:21,240"
+			},
+			"offsets": {
+				"from": 437680,
+				"to": 441240
+			},
+			"text": " And then we give an example just to make sure that the model is"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:21,240",
+				"to": "00:07:24,840"
+			},
+			"offsets": {
+				"from": 441240,
+				"to": 444840
+			},
+			"text": " going to get it right. Okay. So we show it like input, write a"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:24,840",
+				"to": "00:07:28,120"
+			},
+			"offsets": {
+				"from": 444840,
+				"to": 448120
+			},
+			"text": " Python function to read a file and then output coding, input,"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:28,120",
+				"to": "00:07:31,320"
+			},
+			"offsets": {
+				"from": 448120,
+				"to": 451320
+			},
+			"text": " salty equation, two x plus three equal 11. And then the output"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:31,320",
+				"to": "00:07:36,640"
+			},
+			"offsets": {
+				"from": 451320,
+				"to": 456640
+			},
+			"text": " is pretty simple, right? And then we start with the input given"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:36,640",
+				"to": "00:07:41,200"
+			},
+			"offsets": {
+				"from": 456640,
+				"to": 461200
+			},
+			"text": " by the user. Now what we do is we make a call to the other"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:41,200",
+				"to": "00:07:45,600"
+			},
+			"offsets": {
+				"from": 461200,
+				"to": 465600
+			},
+			"text": " lab, which hopefully will return either coding or math. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:45,600",
+				"to": "00:07:49,840"
+			},
+			"offsets": {
+				"from": 465600,
+				"to": 469840
+			},
+			"text": " then we print, we print that out so that we can make sure that"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:49,840",
+				"to": "00:07:54,040"
+			},
+			"offsets": {
+				"from": 469840,
+				"to": 474040
+			},
+			"text": " everything's working. And then we identify the selected prompt"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:54,040",
+				"to": "00:07:57,960"
+			},
+			"offsets": {
+				"from": 474040,
+				"to": 477960
+			},
+			"text": " from the dictionary based on the key that's going to come out of"
+		},
+		{
+			"timestamps": {
+				"from": "00:07:57,960",
+				"to": "00:08:03,680"
+			},
+			"offsets": {
+				"from": 477960,
+				"to": 483680
+			},
+			"text": " this LLM call. And finally, we make the LLM call and return"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:03,680",
+				"to": "00:08:07,680"
+			},
+			"offsets": {
+				"from": 483680,
+				"to": 487680
+			},
+			"text": " that. So the output of the LLM call with the selected prompt"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:07,680",
+				"to": "00:08:11,680"
+			},
+			"offsets": {
+				"from": 487680,
+				"to": 491680
+			},
+			"text": " from this dictionary, which is going to be either the value for"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:11,680",
+				"to": "00:08:18,240"
+			},
+			"offsets": {
+				"from": 491680,
+				"to": 498240
+			},
+			"text": " this coding prompt or the math prompt. And the input given by"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:18,240",
+				"to": "00:08:21,160"
+			},
+			"offsets": {
+				"from": 498240,
+				"to": 501160
+			},
+			"text": " the user has the input that's going to be processed by this"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:21,160",
+				"to": "00:08:25,240"
+			},
+			"offsets": {
+				"from": 501160,
+				"to": 505240
+			},
+			"text": " prompt with this LLM call, which is the call to this function"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:25,240",
+				"to": "00:08:29,160"
+			},
+			"offsets": {
+				"from": 505240,
+				"to": 509160
+			},
+			"text": " that we wrote back here, called LLM call, which uses the"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:29,160",
+				"to": "00:08:33,920"
+			},
+			"offsets": {
+				"from": 509160,
+				"to": 513920
+			},
+			"text": " GPT five mini model to process the output process the input. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:33,920",
+				"to": "00:08:40,200"
+			},
+			"offsets": {
+				"from": 513920,
+				"to": 520200
+			},
+			"text": " when we do that, so when we do that, no, let me just go here,"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:40,200",
+				"to": "00:08:44,120"
+			},
+			"offsets": {
+				"from": 520200,
+				"to": 524120
+			},
+			"text": " running the following prompt. So we're going to run that. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:44,120",
+				"to": "00:08:46,800"
+			},
+			"offsets": {
+				"from": 524120,
+				"to": 526800
+			},
+			"text": " now we're going to use it. So I'm going to say write some code,"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:47,600",
+				"to": "00:08:51,760"
+			},
+			"offsets": {
+				"from": 527600,
+				"to": 531760
+			},
+			"text": " they can load a PDF and extract the headers of the document. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:51,760",
+				"to": "00:08:55,080"
+			},
+			"offsets": {
+				"from": 531760,
+				"to": 535080
+			},
+			"text": " then I give the dictionary that contains the possible routes."
+		},
+		{
+			"timestamps": {
+				"from": "00:08:55,080",
+				"to": "00:08:59,000"
+			},
+			"offsets": {
+				"from": 535080,
+				"to": 539000
+			},
+			"text": " Okay. And we're going to print that output. So now we're going"
+		},
+		{
+			"timestamps": {
+				"from": "00:08:59,000",
+				"to": "00:08:59,880"
+			},
+			"offsets": {
+				"from": 539000,
+				"to": 539880
+			},
+			"text": " to send that out."
+		},
+		{
+			"timestamps": {
+				"from": "00:09:17,600",
+				"to": "00:09:32,640"
+			},
+			"offsets": {
+				"from": 557600,
+				"to": 572640
+			},
+			"text": " All right, perfect. So we're done running. So as you can see,"
+		},
+		{
+			"timestamps": {
+				"from": "00:09:32,640",
+				"to": "00:09:36,480"
+			},
+			"offsets": {
+				"from": 572640,
+				"to": 576480
+			},
+			"text": " the output was coding. And then it ran the output for the"
+		},
+		{
+			"timestamps": {
+				"from": "00:09:36,480",
+				"to": "00:09:41,840"
+			},
+			"offsets": {
+				"from": 576480,
+				"to": 581840
+			},
+			"text": " coding prompt. And it produced some very reliable output,"
+		},
+		{
+			"timestamps": {
+				"from": "00:09:41,840",
+				"to": "00:09:44,840"
+			},
+			"offsets": {
+				"from": 581840,
+				"to": 584840
+			},
+			"text": " produced something that makes sense with the prompt. So we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:09:44,840",
+				"to": "00:09:47,880"
+			},
+			"offsets": {
+				"from": 584840,
+				"to": 587880
+			},
+			"text": " done. This is pretty good. Now, it's important to note that"
+		},
+		{
+			"timestamps": {
+				"from": "00:09:47,880",
+				"to": "00:09:52,320"
+			},
+			"offsets": {
+				"from": 587880,
+				"to": 592320
+			},
+			"text": " these two examples for chaining and routing, I adapted them from"
+		},
+		{
+			"timestamps": {
+				"from": "00:09:52,320",
+				"to": "00:09:56,720"
+			},
+			"offsets": {
+				"from": 592320,
+				"to": 596720
+			},
+			"text": " a really cool cool book from a cookbook from anthropic, which"
+		},
+		{
+			"timestamps": {
+				"from": "00:09:56,720",
+				"to": "00:10:00,960"
+			},
+			"offsets": {
+				"from": 596720,
+				"to": 600960
+			},
+			"text": " you can check out on this article as well. Let me just"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:00,960",
+				"to": "00:10:05,560"
+			},
+			"offsets": {
+				"from": 600960,
+				"to": 605560
+			},
+			"text": " show you cookbook. There you go. So if you're going here, so"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:05,560",
+				"to": "00:10:08,480"
+			},
+			"offsets": {
+				"from": 605560,
+				"to": 608480
+			},
+			"text": " this is the cookbook. And I have it referenced in the notebook."
+		},
+		{
+			"timestamps": {
+				"from": "00:10:08,480",
+				"to": "00:10:10,800"
+			},
+			"offsets": {
+				"from": 608480,
+				"to": 610800
+			},
+			"text": " And I'm going to make the notebook available on GitHub. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:10,800",
+				"to": "00:10:14,080"
+			},
+			"offsets": {
+				"from": 610800,
+				"to": 614080
+			},
+			"text": " you you have access to it. And this example was from the basic"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:14,080",
+				"to": "00:10:18,200"
+			},
+			"offsets": {
+				"from": 614080,
+				"to": 618200
+			},
+			"text": " workflow notebook. However, they did this tailor to the cloud"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:18,200",
+				"to": "00:10:22,720"
+			},
+			"offsets": {
+				"from": 618200,
+				"to": 622720
+			},
+			"text": " API. And I did it tailored to the opening API. But it's pretty"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:22,720",
+				"to": "00:10:26,440"
+			},
+			"offsets": {
+				"from": 622720,
+				"to": 626440
+			},
+			"text": " similar with the difference that they did some XML parsing. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:26,440",
+				"to": "00:10:29,120"
+			},
+			"offsets": {
+				"from": 626440,
+				"to": 629120
+			},
+			"text": " I'm not doing that in the example we're seeing now. But"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:29,120",
+				"to": "00:10:32,200"
+			},
+			"offsets": {
+				"from": 629120,
+				"to": 632200
+			},
+			"text": " this is an awesome notebook. If you want to do stuff from scratch,"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:32,200",
+				"to": "00:10:37,240"
+			},
+			"offsets": {
+				"from": 632200,
+				"to": 637240
+			},
+			"text": " this is a great starting point. So going back, now we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:37,240",
+				"to": "00:10:41,360"
+			},
+			"offsets": {
+				"from": 637240,
+				"to": 641360
+			},
+			"text": " go to level four, which is when we combine LLMs with the"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:41,360",
+				"to": "00:10:44,720"
+			},
+			"offsets": {
+				"from": 641360,
+				"to": 644720
+			},
+			"text": " information of some available functions. And we put that"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:44,720",
+				"to": "00:10:47,760"
+			},
+			"offsets": {
+				"from": 644720,
+				"to": 647760
+			},
+			"text": " information inside of the prompt to the model to see if the"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:47,760",
+				"to": "00:10:52,480"
+			},
+			"offsets": {
+				"from": 647760,
+				"to": 652480
+			},
+			"text": " model is able to make calls to those functions. And the"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:52,480",
+				"to": "00:10:55,840"
+			},
+			"offsets": {
+				"from": 652480,
+				"to": 655840
+			},
+			"text": " inspiration for that was from a paper called two former, where"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:55,840",
+				"to": "00:10:59,040"
+			},
+			"offsets": {
+				"from": 655840,
+				"to": 659040
+			},
+			"text": " language models taught themselves how to use tools, a pretty"
+		},
+		{
+			"timestamps": {
+				"from": "00:10:59,040",
+				"to": "00:11:04,240"
+			},
+			"offsets": {
+				"from": 659040,
+				"to": 664240
+			},
+			"text": " simple way. All they did was to provide outputs as text, which"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:04,240",
+				"to": "00:11:08,800"
+			},
+			"offsets": {
+				"from": 664240,
+				"to": 668800
+			},
+			"text": " were inside of the text, they had special strings that could be"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:08,800",
+				"to": "00:11:13,000"
+			},
+			"offsets": {
+				"from": 668800,
+				"to": 673000
+			},
+			"text": " parsed into function calls that we can run with Python code."
+		},
+		{
+			"timestamps": {
+				"from": "00:11:13,000",
+				"to": "00:11:16,960"
+			},
+			"offsets": {
+				"from": 673000,
+				"to": 676960
+			},
+			"text": " Okay, like you can see here, this is this thing in purple can be"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:16,960",
+				"to": "00:11:22,160"
+			},
+			"offsets": {
+				"from": 676960,
+				"to": 682160
+			},
+			"text": " run as a Python function, which calls this Q and API or Q and a"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:22,160",
+				"to": "00:11:27,840"
+			},
+			"offsets": {
+				"from": 682160,
+				"to": 687840
+			},
+			"text": " function. Okay, so inspired by this paper, we're going to do a"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:27,840",
+				"to": "00:11:31,720"
+			},
+			"offsets": {
+				"from": 687840,
+				"to": 691720
+			},
+			"text": " very simple example. So we're going to load up some imports."
+		},
+		{
+			"timestamps": {
+				"from": "00:11:31,720",
+				"to": "00:11:34,960"
+			},
+			"offsets": {
+				"from": 691720,
+				"to": 694960
+			},
+			"text": " And what we're going to do here is essentially, we start with"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:34,960",
+				"to": "00:11:39,680"
+			},
+			"offsets": {
+				"from": 694960,
+				"to": 699680
+			},
+			"text": " something very silly simple function, which essentially is"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:39,680",
+				"to": "00:11:44,520"
+			},
+			"offsets": {
+				"from": 699680,
+				"to": 704520
+			},
+			"text": " going to set us up in the in a base directory. And then if it's"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:44,520",
+				"to": "00:11:49,040"
+			},
+			"offsets": {
+				"from": 704520,
+				"to": 709040
+			},
+			"text": " not, it's going to handle some errors. The most important"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:49,040",
+				"to": "00:11:51,440"
+			},
+			"offsets": {
+				"from": 709040,
+				"to": 711440
+			},
+			"text": " thing is that we're going to write two functions, one to read"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:51,440",
+				"to": "00:11:55,240"
+			},
+			"offsets": {
+				"from": 711440,
+				"to": 715240
+			},
+			"text": " files and one to write files. So we're going to read a file. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:55,240",
+				"to": "00:11:58,520"
+			},
+			"offsets": {
+				"from": 715240,
+				"to": 718520
+			},
+			"text": " this function is going to take in a file path. And it's going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:11:58,520",
+				"to": "00:12:02,680"
+			},
+			"offsets": {
+				"from": 718520,
+				"to": 722680
+			},
+			"text": " set the base directory and then read the file on side of that"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:02,680",
+				"to": "00:12:07,040"
+			},
+			"offsets": {
+				"from": 722680,
+				"to": 727040
+			},
+			"text": " path. Same thing for the right file function, it's going to set"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:07,040",
+				"to": "00:12:11,080"
+			},
+			"offsets": {
+				"from": 727040,
+				"to": 731080
+			},
+			"text": " the base directory and then it's going to write a file in the"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:11,080",
+				"to": "00:12:16,320"
+			},
+			"offsets": {
+				"from": 731080,
+				"to": 736320
+			},
+			"text": " specified file path. Okay, pretty simple, pretty easy. So now,"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:16,320",
+				"to": "00:12:20,280"
+			},
+			"offsets": {
+				"from": 736320,
+				"to": 740280
+			},
+			"text": " what we're going to do is the level four is going to be about"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:20,280",
+				"to": "00:12:25,200"
+			},
+			"offsets": {
+				"from": 740280,
+				"to": 745200
+			},
+			"text": " merging the LLM with the functions inside of the prompt. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:25,200",
+				"to": "00:12:28,040"
+			},
+			"offsets": {
+				"from": 745200,
+				"to": 748040
+			},
+			"text": " for that, all we're going to do is we're going to write a"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:28,040",
+				"to": "00:12:35,080"
+			},
+			"offsets": {
+				"from": 748040,
+				"to": 755080
+			},
+			"text": " little piece of code that gets the function as a string. So I use"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:35,080",
+				"to": "00:12:38,600"
+			},
+			"offsets": {
+				"from": 755080,
+				"to": 758600
+			},
+			"text": " the inspect module, which I didn't know existed, honestly, up"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:38,600",
+				"to": "00:12:41,920"
+			},
+			"offsets": {
+				"from": 758600,
+				"to": 761920
+			},
+			"text": " to today. So that was pretty cool. Because in the previous"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:41,920",
+				"to": "00:12:45,360"
+			},
+			"offsets": {
+				"from": 761920,
+				"to": 765360
+			},
+			"text": " example that I did on my latest video, my lesson, my last video"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:45,360",
+				"to": "00:12:50,640"
+			},
+			"offsets": {
+				"from": 765360,
+				"to": 770640
+			},
+			"text": " on this topic, I actually put the functions as strings inside"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:50,640",
+				"to": "00:12:53,600"
+			},
+			"offsets": {
+				"from": 770640,
+				"to": 773600
+			},
+			"text": " of the prompt manually. So it's nice to know that I can do"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:53,600",
+				"to": "00:12:58,320"
+			},
+			"offsets": {
+				"from": 773600,
+				"to": 778320
+			},
+			"text": " that programmatically. Now, I have a full prompt that contains"
+		},
+		{
+			"timestamps": {
+				"from": "00:12:58,320",
+				"to": "00:13:01,880"
+			},
+			"offsets": {
+				"from": 778320,
+				"to": 781880
+			},
+			"text": " the information about the functions to write files and read"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:01,880",
+				"to": "00:13:05,040"
+			},
+			"offsets": {
+				"from": 781880,
+				"to": 785040
+			},
+			"text": " files. Okay. And what we're going to do with that is we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:05,040",
+				"to": "00:13:10,960"
+			},
+			"offsets": {
+				"from": 785040,
+				"to": 790960
+			},
+			"text": " going to send input to the OpenAI Responses API with the"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:10,960",
+				"to": "00:13:14,720"
+			},
+			"offsets": {
+				"from": 790960,
+				"to": 794720
+			},
+			"text": " GPT five mini mod. And we're going to say you're a helpful"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:14,720",
+				"to": "00:13:18,480"
+			},
+			"offsets": {
+				"from": 794720,
+				"to": 798480
+			},
+			"text": " assistant that can write and read files. This used to be the"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:18,480",
+				"to": "00:13:22,520"
+			},
+			"offsets": {
+				"from": 798480,
+				"to": 802520
+			},
+			"text": " system message from the previous version of their API. But now"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:22,520",
+				"to": "00:13:26,440"
+			},
+			"offsets": {
+				"from": 802520,
+				"to": 806440
+			},
+			"text": " they change it to instructions. It's the same thing. So now this"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:26,440",
+				"to": "00:13:29,600"
+			},
+			"offsets": {
+				"from": 806440,
+				"to": 809600
+			},
+			"text": " model has the information about the two functions available"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:29,600",
+				"to": "00:13:35,200"
+			},
+			"offsets": {
+				"from": 809600,
+				"to": 815200
+			},
+			"text": " plus has instructions about using these tools. So we're going"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:35,200",
+				"to": "00:13:37,800"
+			},
+			"offsets": {
+				"from": 815200,
+				"to": 817800
+			},
+			"text": " to see if this model is able to produce an output that we can"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:37,800",
+				"to": "00:13:42,280"
+			},
+			"offsets": {
+				"from": 817800,
+				"to": 822280
+			},
+			"text": " transform into an execution of the function indicated. So let's"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:42,280",
+				"to": "00:13:48,280"
+			},
+			"offsets": {
+				"from": 822280,
+				"to": 828280
+			},
+			"text": " see if that's possible. So let's see. This call level for a"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:48,280",
+				"to": "00:13:52,160"
+			},
+			"offsets": {
+				"from": 828280,
+				"to": 832160
+			},
+			"text": " Lamb function in prompt takes an input prompt like this, write a"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:52,160",
+				"to": "00:13:55,800"
+			},
+			"offsets": {
+				"from": 832160,
+				"to": 835800
+			},
+			"text": " file called test the content hello world. And then I give it a"
+		},
+		{
+			"timestamps": {
+				"from": "00:13:55,800",
+				"to": "00:14:00,000"
+			},
+			"offsets": {
+				"from": 835800,
+				"to": 840000
+			},
+			"text": " list of the tools available. So write file and read file. Okay."
+		},
+		{
+			"timestamps": {
+				"from": "00:14:00,000",
+				"to": "00:14:07,080"
+			},
+			"offsets": {
+				"from": 840000,
+				"to": 847080
+			},
+			"text": " And what we're going to do now. Yeah, we're going to now we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:07,080",
+				"to": "00:14:13,280"
+			},
+			"offsets": {
+				"from": 847080,
+				"to": 853280
+			},
+			"text": " going to run this. And we're going to see the output of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:13,280",
+				"to": "00:14:16,280"
+			},
+			"offsets": {
+				"from": 853280,
+				"to": 856280
+			},
+			"text": " function call. We're going to see the output of this function."
+		},
+		{
+			"timestamps": {
+				"from": "00:14:17,520",
+				"to": "00:14:20,280"
+			},
+			"offsets": {
+				"from": 857520,
+				"to": 860280
+			},
+			"text": " So as you can see, the output of this function is exactly what"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:20,280",
+				"to": "00:14:26,920"
+			},
+			"offsets": {
+				"from": 860280,
+				"to": 866920
+			},
+			"text": " we need, which is a string that exactly reads as the calling of"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:26,920",
+				"to": "00:14:30,960"
+			},
+			"offsets": {
+				"from": 866920,
+				"to": 870960
+			},
+			"text": " the right function for the task. So what we're going to do is"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:30,960",
+				"to": "00:14:34,200"
+			},
+			"offsets": {
+				"from": 870960,
+				"to": 874200
+			},
+			"text": " we're going to use Python's built in exact module, which you can"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:34,200",
+				"to": "00:14:37,040"
+			},
+			"offsets": {
+				"from": 874200,
+				"to": 877040
+			},
+			"text": " check out in the Python documentation, which essentially"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:37,040",
+				"to": "00:14:42,560"
+			},
+			"offsets": {
+				"from": 877040,
+				"to": 882560
+			},
+			"text": " supports dynamic execution of Python code. Okay, so supports"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:42,560",
+				"to": "00:14:46,200"
+			},
+			"offsets": {
+				"from": 882560,
+				"to": 886200
+			},
+			"text": " dynamic execution Python code. That's what it does. So we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:46,200",
+				"to": "00:14:52,080"
+			},
+			"offsets": {
+				"from": 886200,
+				"to": 892080
+			},
+			"text": " going to use it to execute this string that indicates that we"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:52,080",
+				"to": "00:14:56,880"
+			},
+			"offsets": {
+				"from": 892080,
+				"to": 896880
+			},
+			"text": " have to write the file. Okay, so when we do that, what happens"
+		},
+		{
+			"timestamps": {
+				"from": "00:14:56,880",
+				"to": "00:15:03,440"
+			},
+			"offsets": {
+				"from": 896880,
+				"to": 903440
+			},
+			"text": " is that we execute the action. So if we do a cat on the output of"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:03,440",
+				"to": "00:15:07,200"
+			},
+			"offsets": {
+				"from": 903440,
+				"to": 907200
+			},
+			"text": " test.txt to see if it was created, you see that it was"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:07,200",
+				"to": "00:15:11,520"
+			},
+			"offsets": {
+				"from": 907200,
+				"to": 911520
+			},
+			"text": " created. So it's perfect. So what I want you to start seeing"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:11,520",
+				"to": "00:15:16,400"
+			},
+			"offsets": {
+				"from": 911520,
+				"to": 916400
+			},
+			"text": " is that we're evolving from calling LLM APIs to trying to"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:16,400",
+				"to": "00:15:20,440"
+			},
+			"offsets": {
+				"from": 916400,
+				"to": 920440
+			},
+			"text": " give LLM the ability to perform actions. But we are in the"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:20,440",
+				"to": "00:15:24,000"
+			},
+			"offsets": {
+				"from": 920440,
+				"to": 924000
+			},
+			"text": " initial stages of that. Let's see how we can evolve even"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:24,000",
+				"to": "00:15:28,080"
+			},
+			"offsets": {
+				"from": 924000,
+				"to": 928080
+			},
+			"text": " further. Now we're going to look at something called structured"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:28,080",
+				"to": "00:15:32,040"
+			},
+			"offsets": {
+				"from": 928080,
+				"to": 932040
+			},
+			"text": " outputs. Now structure outputs, it's a very interesting thing."
+		},
+		{
+			"timestamps": {
+				"from": "00:15:32,040",
+				"to": "00:15:36,760"
+			},
+			"offsets": {
+				"from": 932040,
+				"to": 936760
+			},
+			"text": " What it does is essentially give these LLM the ability to take"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:36,800",
+				"to": "00:15:41,600"
+			},
+			"offsets": {
+				"from": 936800,
+				"to": 941600
+			},
+			"text": " unstructured data and produce structured data, so structured"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:41,600",
+				"to": "00:15:46,800"
+			},
+			"offsets": {
+				"from": 941600,
+				"to": 946800
+			},
+			"text": " outputs. That's what it does. And there's no official paper on"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:46,800",
+				"to": "00:15:49,520"
+			},
+			"offsets": {
+				"from": 946800,
+				"to": 949520
+			},
+			"text": " this topic, which I found kind of weird, but I think one of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:49,520",
+				"to": "00:15:53,080"
+			},
+			"offsets": {
+				"from": 949520,
+				"to": 953080
+			},
+			"text": " best resources that you can see that are open source on the"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:53,080",
+				"to": "00:15:59,080"
+			},
+			"offsets": {
+				"from": 953080,
+				"to": 959080
+			},
+			"text": " topic are either this JSON form or GitHub repo from hugging"
+		},
+		{
+			"timestamps": {
+				"from": "00:15:59,080",
+				"to": "00:16:02,680"
+			},
+			"offsets": {
+				"from": 959080,
+				"to": 962680
+			},
+			"text": " face, where they show a bulletproof way to generate structured"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:02,680",
+				"to": "00:16:06,880"
+			},
+			"offsets": {
+				"from": 962680,
+				"to": 966880
+			},
+			"text": " JSON from language models. It's super cool, and you can see a"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:06,880",
+				"to": "00:16:11,360"
+			},
+			"offsets": {
+				"from": 966880,
+				"to": 971360
+			},
+			"text": " little bit about it. But the major source for knowledge on this"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:11,360",
+				"to": "00:16:14,120"
+			},
+			"offsets": {
+				"from": 971360,
+				"to": 974120
+			},
+			"text": " topic has been the OpenAI Docs on structure outputs when they"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:14,120",
+				"to": "00:16:19,800"
+			},
+			"offsets": {
+				"from": 974120,
+				"to": 979800
+			},
+			"text": " released it in 2024. And essentially what you see is that"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:19,800",
+				"to": "00:16:26,600"
+			},
+			"offsets": {
+				"from": 979800,
+				"to": 986600
+			},
+			"text": " you can produce structured output. So an object given something"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:26,600",
+				"to": "00:16:30,840"
+			},
+			"offsets": {
+				"from": 986600,
+				"to": 990840
+			},
+			"text": " called a JSON schema. And what the JSON schema is is"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:30,840",
+				"to": "00:16:35,960"
+			},
+			"offsets": {
+				"from": 990840,
+				"to": 995960
+			},
+			"text": " essentially something that defines, okay, what is the, what is"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:35,960",
+				"to": "00:16:40,320"
+			},
+			"offsets": {
+				"from": 995960,
+				"to": 1000320
+			},
+			"text": " the structure of my object? Okay. So essentially, what that"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:40,320",
+				"to": "00:16:44,640"
+			},
+			"offsets": {
+				"from": 1000320,
+				"to": 1004640
+			},
+			"text": " means is that we can indicate to the model, look, I want to"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:44,640",
+				"to": "00:16:47,360"
+			},
+			"offsets": {
+				"from": 1004640,
+				"to": 1007360
+			},
+			"text": " produce an output that has this structure, and the model is"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:47,360",
+				"to": "00:16:50,160"
+			},
+			"offsets": {
+				"from": 1007360,
+				"to": 1010160
+			},
+			"text": " going to produce an output that adheres to the structure that I"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:50,160",
+				"to": "00:16:55,640"
+			},
+			"offsets": {
+				"from": 1010160,
+				"to": 1015640
+			},
+			"text": " want. So for example, I'm going to transform the previous"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:55,640",
+				"to": "00:16:59,840"
+			},
+			"offsets": {
+				"from": 1015640,
+				"to": 1019840
+			},
+			"text": " example that we're doing into a structured output problem. So I'm"
+		},
+		{
+			"timestamps": {
+				"from": "00:16:59,840",
+				"to": "00:17:03,720"
+			},
+			"offsets": {
+				"from": 1019840,
+				"to": 1023720
+			},
+			"text": " going to create a class called right file operation. And I'm"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:03,720",
+				"to": "00:17:08,280"
+			},
+			"offsets": {
+				"from": 1023720,
+				"to": 1028280
+			},
+			"text": " going to be using a module, a very cool package in Python"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:08,280",
+				"to": "00:17:14,840"
+			},
+			"offsets": {
+				"from": 1028280,
+				"to": 1034840
+			},
+			"text": " called by dentic. So what by dentic is by dentic. So by dentic"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:14,840",
+				"to": "00:17:18,280"
+			},
+			"offsets": {
+				"from": 1034840,
+				"to": 1038280
+			},
+			"text": " is essentially a data validation library in Python that works"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:18,280",
+				"to": "00:17:21,440"
+			},
+			"offsets": {
+				"from": 1038280,
+				"to": 1041440
+			},
+			"text": " amazingly well with LLM's. It's probably one of the most"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:21,440",
+				"to": "00:17:25,600"
+			},
+			"offsets": {
+				"from": 1041440,
+				"to": 1045600
+			},
+			"text": " important packages out there on the LLM era that we're living"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:25,600",
+				"to": "00:17:29,040"
+			},
+			"offsets": {
+				"from": 1045600,
+				"to": 1049040
+			},
+			"text": " right now. So what we're going to do is we're going to create a"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:29,040",
+				"to": "00:17:31,880"
+			},
+			"offsets": {
+				"from": 1049040,
+				"to": 1051880
+			},
+			"text": " little object called right file operation. It's going to have"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:31,880",
+				"to": "00:17:36,080"
+			},
+			"offsets": {
+				"from": 1051880,
+				"to": 1056080
+			},
+			"text": " two attributes, the file path, which contains the file where"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:36,080",
+				"to": "00:17:40,480"
+			},
+			"offsets": {
+				"from": 1056080,
+				"to": 1060480
+			},
+			"text": " the file should be saved, and the contents of that file. So this"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:40,480",
+				"to": "00:17:45,320"
+			},
+			"offsets": {
+				"from": 1060480,
+				"to": 1065320
+			},
+			"text": " is mimicking the operation of writing a file with the right"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:45,320",
+				"to": "00:17:48,120"
+			},
+			"offsets": {
+				"from": 1065320,
+				"to": 1068120
+			},
+			"text": " file function. But instead of calling that function, we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:48,120",
+				"to": "00:17:54,080"
+			},
+			"offsets": {
+				"from": 1068120,
+				"to": 1074080
+			},
+			"text": " producing the arguments to call that function. Hopefully, you"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:54,080",
+				"to": "00:17:57,720"
+			},
+			"offsets": {
+				"from": 1074080,
+				"to": 1077720
+			},
+			"text": " see where we're going with this. And we're going to do the"
+		},
+		{
+			"timestamps": {
+				"from": "00:17:57,720",
+				"to": "00:18:01,000"
+			},
+			"offsets": {
+				"from": 1077720,
+				"to": 1081000
+			},
+			"text": " same with the reap file function. So reap file operation in the"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:01,000",
+				"to": "00:18:05,040"
+			},
+			"offsets": {
+				"from": 1081000,
+				"to": 1085040
+			},
+			"text": " file path. Now, we're going to write a prompt like write a file"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:05,040",
+				"to": "00:18:10,200"
+			},
+			"offsets": {
+				"from": 1085040,
+				"to": 1090200
+			},
+			"text": " called test2.txt with the content hello world again. And we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:10,200",
+				"to": "00:18:14,880"
+			},
+			"offsets": {
+				"from": 1090200,
+				"to": 1094880
+			},
+			"text": " going to make a call to the open AI responses API. But with the"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:14,880",
+				"to": "00:18:20,480"
+			},
+			"offsets": {
+				"from": 1094880,
+				"to": 1100480
+			},
+			"text": " little added feature, we're going to set the best format for"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:20,480",
+				"to": "00:18:24,560"
+			},
+			"offsets": {
+				"from": 1100480,
+				"to": 1104560
+			},
+			"text": " the output of this model to adhere to the right file"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:24,560",
+				"to": "00:18:28,320"
+			},
+			"offsets": {
+				"from": 1104560,
+				"to": 1108320
+			},
+			"text": " operation object. So that means that this output is going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:28,320",
+				"to": "00:18:33,080"
+			},
+			"offsets": {
+				"from": 1108320,
+				"to": 1113080
+			},
+			"text": " contain these attributes file path and content. Hopefully, being"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:33,080",
+				"to": "00:18:37,520"
+			},
+			"offsets": {
+				"from": 1113080,
+				"to": 1117520
+			},
+			"text": " tailored to the prompt that we're writing right here. So the"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:37,520",
+				"to": "00:18:42,160"
+			},
+			"offsets": {
+				"from": 1117520,
+				"to": 1122160
+			},
+			"text": " file path hopefully is going to be test2.txt. And the contents"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:42,160",
+				"to": "00:18:46,400"
+			},
+			"offsets": {
+				"from": 1122160,
+				"to": 1126400
+			},
+			"text": " are going to be hello world again. So now we're going to do"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:46,400",
+				"to": "00:18:49,000"
+			},
+			"offsets": {
+				"from": 1126400,
+				"to": 1129000
+			},
+			"text": " that. And then we're going to see what that output looks like."
+		},
+		{
+			"timestamps": {
+				"from": "00:18:54,600",
+				"to": "00:18:59,080"
+			},
+			"offsets": {
+				"from": 1134600,
+				"to": 1139080
+			},
+			"text": " Perfect. So as you can see, we were able to obtain exactly"
+		},
+		{
+			"timestamps": {
+				"from": "00:18:59,080",
+				"to": "00:19:04,520"
+			},
+			"offsets": {
+				"from": 1139080,
+				"to": 1144520
+			},
+			"text": " what we wanted. So we obtained it programmatically, because we"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:04,520",
+				"to": "00:19:07,920"
+			},
+			"offsets": {
+				"from": 1144520,
+				"to": 1147920
+			},
+			"text": " created something that's a structured object represented by"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:07,920",
+				"to": "00:19:12,760"
+			},
+			"offsets": {
+				"from": 1147920,
+				"to": 1152760
+			},
+			"text": " response dot output parts, which if we look at it is actually the"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:12,760",
+				"to": "00:19:17,320"
+			},
+			"offsets": {
+				"from": 1152760,
+				"to": 1157320
+			},
+			"text": " object that we were hoping for. So if I create this here and I"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:17,320",
+				"to": "00:19:19,960"
+			},
+			"offsets": {
+				"from": 1157320,
+				"to": 1159960
+			},
+			"text": " output, you can see that it says the object, it contains the"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:19,960",
+				"to": "00:19:26,240"
+			},
+			"offsets": {
+				"from": 1159960,
+				"to": 1166240
+			},
+			"text": " things that we were looking for. So now we can write level five."
+		},
+		{
+			"timestamps": {
+				"from": "00:19:26,240",
+				"to": "00:19:31,080"
+			},
+			"offsets": {
+				"from": 1166240,
+				"to": 1171080
+			},
+			"text": " And level five is going to be about leveraging this to execute"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:31,080",
+				"to": "00:19:35,360"
+			},
+			"offsets": {
+				"from": 1171080,
+				"to": 1175360
+			},
+			"text": " an action, similarly to what we did before with the functions"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:35,360",
+				"to": "00:19:38,800"
+			},
+			"offsets": {
+				"from": 1175360,
+				"to": 1178800
+			},
+			"text": " inside of the prompt. But this time we're leveraging structured"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:38,800",
+				"to": "00:19:43,480"
+			},
+			"offsets": {
+				"from": 1178800,
+				"to": 1183480
+			},
+			"text": " outputs instead. So we're going to write the response to the"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:43,480",
+				"to": "00:19:48,120"
+			},
+			"offsets": {
+				"from": 1183480,
+				"to": 1188120
+			},
+			"text": " LMBPI. And we're going to write the format to be right file"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:48,120",
+				"to": "00:19:53,400"
+			},
+			"offsets": {
+				"from": 1188120,
+				"to": 1193400
+			},
+			"text": " operation. And then we're going to get the arguments back"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:53,400",
+				"to": "00:19:58,640"
+			},
+			"offsets": {
+				"from": 1193400,
+				"to": 1198640
+			},
+			"text": " programmatically. And then we're going to call the function"
+		},
+		{
+			"timestamps": {
+				"from": "00:19:58,640",
+				"to": "00:20:04,120"
+			},
+			"offsets": {
+				"from": 1198640,
+				"to": 1204120
+			},
+			"text": " right file super simple, super easy. So now we're going to call"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:04,120",
+				"to": "00:20:07,680"
+			},
+			"offsets": {
+				"from": 1204120,
+				"to": 1207680
+			},
+			"text": " this and see what happens. Hopefully what's going to happen"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:07,680",
+				"to": "00:20:14,320"
+			},
+			"offsets": {
+				"from": 1207680,
+				"to": 1214320
+			},
+			"text": " is that the model is going to extract this as file path. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:14,320",
+				"to": "00:20:18,400"
+			},
+			"offsets": {
+				"from": 1214320,
+				"to": 1218400
+			},
+			"text": " this has the content of the file. And then it's going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:18,400",
+				"to": "00:20:22,400"
+			},
+			"offsets": {
+				"from": 1218400,
+				"to": 1222400
+			},
+			"text": " execute the function correctly. Now, obviously, if I was doing"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:22,400",
+				"to": "00:20:24,840"
+			},
+			"offsets": {
+				"from": 1222400,
+				"to": 1224840
+			},
+			"text": " something more serious, I would have to put a bunch of error"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:24,840",
+				"to": "00:20:27,920"
+			},
+			"offsets": {
+				"from": 1224840,
+				"to": 1227920
+			},
+			"text": " handling here and a bunch of other stuff. But for now, I think"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:27,920",
+				"to": "00:20:31,920"
+			},
+			"offsets": {
+				"from": 1227920,
+				"to": 1231920
+			},
+			"text": " that this is more than enough. So we're going to call this"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:31,920",
+				"to": "00:20:40,400"
+			},
+			"offsets": {
+				"from": 1231920,
+				"to": 1240400
+			},
+			"text": " it seems like it worked. So we're going to test that out. Perfect"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:40,520",
+				"to": "00:20:45,800"
+			},
+			"offsets": {
+				"from": 1240520,
+				"to": 1245800
+			},
+			"text": " it works. So now we're going to go even further. So we're going"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:45,800",
+				"to": "00:20:51,200"
+			},
+			"offsets": {
+				"from": 1245800,
+				"to": 1251200
+			},
+			"text": " to go to level six and level six is function calling. Now, it's"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:51,200",
+				"to": "00:20:54,040"
+			},
+			"offsets": {
+				"from": 1251200,
+				"to": 1254040
+			},
+			"text": " important to note that I'm talking about structured outputs"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:54,040",
+				"to": "00:20:57,440"
+			},
+			"offsets": {
+				"from": 1254040,
+				"to": 1257440
+			},
+			"text": " before I'm talking about function calling, which is a choice I"
+		},
+		{
+			"timestamps": {
+				"from": "00:20:57,440",
+				"to": "00:21:02,920"
+			},
+			"offsets": {
+				"from": 1257440,
+				"to": 1262920
+			},
+			"text": " made. But chronologically, function calling came first, it"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:02,920",
+				"to": "00:21:06,680"
+			},
+			"offsets": {
+				"from": 1262920,
+				"to": 1266680
+			},
+			"text": " was released in June of 2023 in the open API. If we go to the"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:06,680",
+				"to": "00:21:13,600"
+			},
+			"offsets": {
+				"from": 1266680,
+				"to": 1273600
+			},
+			"text": " release post, we can see here, June, June 2023, the function"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:13,600",
+				"to": "00:21:18,000"
+			},
+			"offsets": {
+				"from": 1273600,
+				"to": 1278000
+			},
+			"text": " calling API was released by OpenAI. And if we go to the"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:18,000",
+				"to": "00:21:22,000"
+			},
+			"offsets": {
+				"from": 1278000,
+				"to": 1282000
+			},
+			"text": " release post by structure outputs, that was in August of"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:22,000",
+				"to": "00:21:27,960"
+			},
+			"offsets": {
+				"from": 1282000,
+				"to": 1287960
+			},
+			"text": " 2024. However, conceptually structure outputs underlies"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:27,960",
+				"to": "00:21:31,320"
+			},
+			"offsets": {
+				"from": 1287960,
+				"to": 1291320
+			},
+			"text": " what makes function calling possible, because it's the"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:31,320",
+				"to": "00:21:36,000"
+			},
+			"offsets": {
+				"from": 1291320,
+				"to": 1296000
+			},
+			"text": " ability to produce outputs that adhere to a certain JSON"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:36,000",
+				"to": "00:21:40,520"
+			},
+			"offsets": {
+				"from": 1296000,
+				"to": 1300520
+			},
+			"text": " schema structure. So what is the function calling? We already"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:40,520",
+				"to": "00:21:44,840"
+			},
+			"offsets": {
+				"from": 1300520,
+				"to": 1304840
+			},
+			"text": " saw that in practice, we saw that we can transform the outputs"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:44,840",
+				"to": "00:21:49,200"
+			},
+			"offsets": {
+				"from": 1304840,
+				"to": 1309200
+			},
+			"text": " of an LLM into calls to functions. So function calling is"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:49,200",
+				"to": "00:21:53,520"
+			},
+			"offsets": {
+				"from": 1309200,
+				"to": 1313520
+			},
+			"text": " just the integration of the capability directly into the"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:53,520",
+				"to": "00:21:57,960"
+			},
+			"offsets": {
+				"from": 1313520,
+				"to": 1317960
+			},
+			"text": " LLM API, in this case, the opening API. And we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:21:57,960",
+				"to": "00:22:02,320"
+			},
+			"offsets": {
+				"from": 1317960,
+				"to": 1322320
+			},
+			"text": " do that by leveraging what the open API allows us to do. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:02,360",
+				"to": "00:22:05,760"
+			},
+			"offsets": {
+				"from": 1322360,
+				"to": 1325760
+			},
+			"text": " we're going to make cost of functions, we're going to allow"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:05,760",
+				"to": "00:22:09,440"
+			},
+			"offsets": {
+				"from": 1325760,
+				"to": 1329440
+			},
+			"text": " LLMs to take actions autonomously with this capability"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:09,440",
+				"to": "00:22:15,080"
+			},
+			"offsets": {
+				"from": 1329440,
+				"to": 1335080
+			},
+			"text": " similarly to what we did before. So to do that, we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:15,080",
+				"to": "00:22:19,600"
+			},
+			"offsets": {
+				"from": 1335080,
+				"to": 1339600
+			},
+			"text": " set up a better way to inform the LLM about the available tools"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:19,600",
+				"to": "00:22:25,400"
+			},
+			"offsets": {
+				"from": 1339600,
+				"to": 1345400
+			},
+			"text": " or functions. And then we're going to see if the LLM is able"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:25,400",
+				"to": "00:22:29,360"
+			},
+			"offsets": {
+				"from": 1345400,
+				"to": 1349360
+			},
+			"text": " to call them. So to do that, we got the final list of callable"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:29,360",
+				"to": "00:22:32,800"
+			},
+			"offsets": {
+				"from": 1349360,
+				"to": 1352800
+			},
+			"text": " tools for the model. And that list is going to be a list of"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:32,800",
+				"to": "00:22:37,160"
+			},
+			"offsets": {
+				"from": 1352800,
+				"to": 1357160
+			},
+			"text": " dictionaries that have a type, in this case, function, and then"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:37,160",
+				"to": "00:22:40,240"
+			},
+			"offsets": {
+				"from": 1357160,
+				"to": 1360240
+			},
+			"text": " we say write file, we give a description, and we give the"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:40,240",
+				"to": "00:22:44,400"
+			},
+			"offsets": {
+				"from": 1360240,
+				"to": 1364400
+			},
+			"text": " parameters that go with a function. So this is similar to"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:44,400",
+				"to": "00:22:47,760"
+			},
+			"offsets": {
+				"from": 1364400,
+				"to": 1367760
+			},
+			"text": " put the to putting the functions inside of the prompt, but we do"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:47,760",
+				"to": "00:22:52,560"
+			},
+			"offsets": {
+				"from": 1367760,
+				"to": 1372560
+			},
+			"text": " it as a JSON object to be a little bit more structurally"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:52,560",
+				"to": "00:22:56,800"
+			},
+			"offsets": {
+				"from": 1372560,
+				"to": 1376800
+			},
+			"text": " sound. So we're doing that for both functions, we're defining"
+		},
+		{
+			"timestamps": {
+				"from": "00:22:56,800",
+				"to": "00:23:00,440"
+			},
+			"offsets": {
+				"from": 1376800,
+				"to": 1380440
+			},
+			"text": " the required parameters, the contents of each of the parameters"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:00,440",
+				"to": "00:23:03,960"
+			},
+			"offsets": {
+				"from": 1380440,
+				"to": 1383960
+			},
+			"text": " or if things good. So once we've done that, what we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:03,960",
+				"to": "00:23:07,640"
+			},
+			"offsets": {
+				"from": 1383960,
+				"to": 1387640
+			},
+			"text": " do next is we're going to write down, I'm going to rewrite the"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:07,640",
+				"to": "00:23:13,600"
+			},
+			"offsets": {
+				"from": 1387640,
+				"to": 1393600
+			},
+			"text": " read and write file functions just to be thorough. And what we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:13,600",
+				"to": "00:23:16,160"
+			},
+			"offsets": {
+				"from": 1393600,
+				"to": 1396160
+			},
+			"text": " going to do now is we're going to set up a list of inputs"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:16,160",
+				"to": "00:23:19,120"
+			},
+			"offsets": {
+				"from": 1396160,
+				"to": 1399120
+			},
+			"text": " through the model, which is just going to have one input. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:19,120",
+				"to": "00:23:21,920"
+			},
+			"offsets": {
+				"from": 1399120,
+				"to": 1401920
+			},
+			"text": " the inputs can to be create a file called test function"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:21,920",
+				"to": "00:23:26,840"
+			},
+			"offsets": {
+				"from": 1401920,
+				"to": 1406840
+			},
+			"text": " calling.txt with the content level six function calling. That's"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:26,840",
+				"to": "00:23:31,240"
+			},
+			"offsets": {
+				"from": 1406840,
+				"to": 1411240
+			},
+			"text": " it. So now we're going to make a call to the open API. We're going"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:31,240",
+				"to": "00:23:35,280"
+			},
+			"offsets": {
+				"from": 1411240,
+				"to": 1415280
+			},
+			"text": " to set the tools parameter to the list that we created called"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:35,280",
+				"to": "00:23:39,040"
+			},
+			"offsets": {
+				"from": 1415280,
+				"to": 1419040
+			},
+			"text": " tools. And we're going to set two choice to auto, because that"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:39,040",
+				"to": "00:23:42,600"
+			},
+			"offsets": {
+				"from": 1419040,
+				"to": 1422600
+			},
+			"text": " sets the choice of a to call to be automatically selected by the"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:42,600",
+				"to": "00:23:46,600"
+			},
+			"offsets": {
+				"from": 1422600,
+				"to": 1426600
+			},
+			"text": " model, in this case, by GPT five mini. And then we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:46,600",
+				"to": "00:23:51,320"
+			},
+			"offsets": {
+				"from": 1426600,
+				"to": 1431320
+			},
+			"text": " give the input as this little list of inputs, which could be"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:51,320",
+				"to": "00:23:55,080"
+			},
+			"offsets": {
+				"from": 1431320,
+				"to": 1435080
+			},
+			"text": " just the just the prompt itself. It doesn't have to be this list"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:55,080",
+				"to": "00:23:59,160"
+			},
+			"offsets": {
+				"from": 1435080,
+				"to": 1439160
+			},
+			"text": " of dictionaries. Okay, however, I think the responses API is"
+		},
+		{
+			"timestamps": {
+				"from": "00:23:59,160",
+				"to": "00:24:02,960"
+			},
+			"offsets": {
+				"from": 1439160,
+				"to": 1442960
+			},
+			"text": " kind of backwards compatible with the previous version. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:02,960",
+				"to": "00:24:06,760"
+			},
+			"offsets": {
+				"from": 1442960,
+				"to": 1446760
+			},
+			"text": " that's why this thing still works. So now we're going to do"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:06,760",
+				"to": "00:24:09,960"
+			},
+			"offsets": {
+				"from": 1446760,
+				"to": 1449960
+			},
+			"text": " that. And then what we're going to do is we're going to save"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:09,960",
+				"to": "00:24:14,040"
+			},
+			"offsets": {
+				"from": 1449960,
+				"to": 1454040
+			},
+			"text": " the functional call outputs for subsequent requests. So stick"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:14,040",
+				"to": "00:24:18,400"
+			},
+			"offsets": {
+				"from": 1454040,
+				"to": 1458400
+			},
+			"text": " with me on this. So here's the thing, when we get the output"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:18,720",
+				"to": "00:24:25,280"
+			},
+			"offsets": {
+				"from": 1458720,
+				"to": 1465280
+			},
+			"text": " from the model, we're going to inspect to see if any of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:25,280",
+				"to": "00:24:28,480"
+			},
+			"offsets": {
+				"from": 1465280,
+				"to": 1468480
+			},
+			"text": " items inside of the output, which is going to be a list of"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:28,480",
+				"to": "00:24:32,520"
+			},
+			"offsets": {
+				"from": 1468480,
+				"to": 1472520
+			},
+			"text": " objects, any of them should have a type of function call, which"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:32,520",
+				"to": "00:24:36,960"
+			},
+			"offsets": {
+				"from": 1472520,
+				"to": 1476960
+			},
+			"text": " indicates that a call to a function was made. And then we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:36,960",
+				"to": "00:24:40,800"
+			},
+			"offsets": {
+				"from": 1476960,
+				"to": 1480800
+			},
+			"text": " going to inspect the names of those function calls. And if they"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:40,800",
+				"to": "00:24:45,400"
+			},
+			"offsets": {
+				"from": 1480800,
+				"to": 1485400
+			},
+			"text": " match the functions that we actually have, we are going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:45,400",
+				"to": "00:24:49,560"
+			},
+			"offsets": {
+				"from": 1485400,
+				"to": 1489560
+			},
+			"text": " take care of the part of making of calling those functions. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:49,560",
+				"to": "00:24:52,760"
+			},
+			"offsets": {
+				"from": 1489560,
+				"to": 1492760
+			},
+			"text": " we're going to say, okay, let's obtain the arguments that the"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:52,760",
+				"to": "00:24:58,280"
+			},
+			"offsets": {
+				"from": 1492760,
+				"to": 1498280
+			},
+			"text": " model determine should be used for the function call. And then"
+		},
+		{
+			"timestamps": {
+				"from": "00:24:58,280",
+				"to": "00:25:02,000"
+			},
+			"offsets": {
+				"from": 1498280,
+				"to": 1502000
+			},
+			"text": " here, I'm doing it kind of like semi manually, because I already"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:02,000",
+				"to": "00:25:05,600"
+			},
+			"offsets": {
+				"from": 1502000,
+				"to": 1505600
+			},
+			"text": " know for the right file, what are the arguments? So I'm taking"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:05,600",
+				"to": "00:25:10,280"
+			},
+			"offsets": {
+				"from": 1505600,
+				"to": 1510280
+			},
+			"text": " them here like this. And then I'm calling I'm making myself the"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:10,280",
+				"to": "00:25:15,880"
+			},
+			"offsets": {
+				"from": 1510280,
+				"to": 1515880
+			},
+			"text": " call to the right file function. Now this is very similar to what"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:15,880",
+				"to": "00:25:19,600"
+			},
+			"offsets": {
+				"from": 1515880,
+				"to": 1519600
+			},
+			"text": " we did before, but we're leveraging the API to be more"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:19,600",
+				"to": "00:25:24,720"
+			},
+			"offsets": {
+				"from": 1519600,
+				"to": 1524720
+			},
+			"text": " deterministic about these executions of these functions. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:24,720",
+				"to": "00:25:30,240"
+			},
+			"offsets": {
+				"from": 1524720,
+				"to": 1530240
+			},
+			"text": " they were appending the outputs of these executions, so that the"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:30,240",
+				"to": "00:25:37,800"
+			},
+			"offsets": {
+				"from": 1530240,
+				"to": 1537800
+			},
+			"text": " model can compile the initial input and the outputs of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:37,800",
+				"to": "00:25:41,160"
+			},
+			"offsets": {
+				"from": 1537800,
+				"to": 1541160
+			},
+			"text": " functions to produce a comprehensive response to the"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:41,160",
+				"to": "00:25:46,040"
+			},
+			"offsets": {
+				"from": 1541160,
+				"to": 1546040
+			},
+			"text": " user. So we're doing a similar thing to read file. And then"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:46,040",
+				"to": "00:25:51,800"
+			},
+			"offsets": {
+				"from": 1546040,
+				"to": 1551800
+			},
+			"text": " finally, we make a second call to the LLM containing"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:51,800",
+				"to": "00:25:55,680"
+			},
+			"offsets": {
+				"from": 1551800,
+				"to": 1555680
+			},
+			"text": " everything that happened, including the initial prompt in"
+		},
+		{
+			"timestamps": {
+				"from": "00:25:55,680",
+				"to": "00:26:01,880"
+			},
+			"offsets": {
+				"from": 1555680,
+				"to": 1561880
+			},
+			"text": " the function calls and their outputs. So now we can inspect"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:01,880",
+				"to": "00:26:05,280"
+			},
+			"offsets": {
+				"from": 1561880,
+				"to": 1565280
+			},
+			"text": " what the final output looks like. So I'm going to run this."
+		},
+		{
+			"timestamps": {
+				"from": "00:26:07,800",
+				"to": "00:26:15,920"
+			},
+			"offsets": {
+				"from": 1567800,
+				"to": 1575920
+			},
+			"text": " And there you go. It seems like the file was created. And we"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:15,920",
+				"to": "00:26:23,160"
+			},
+			"offsets": {
+				"from": 1575920,
+				"to": 1583160
+			},
+			"text": " can test that and perfect. It was created. Awesome. So there you"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:23,160",
+				"to": "00:26:27,000"
+			},
+			"offsets": {
+				"from": 1583160,
+				"to": 1587000
+			},
+			"text": " go. Now it starts to get interesting, because now we've"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:27,000",
+				"to": "00:26:32,600"
+			},
+			"offsets": {
+				"from": 1587000,
+				"to": 1592600
+			},
+			"text": " learned about basic LLM calls, chaining calls, routing calls,"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:33,080",
+				"to": "00:26:38,080"
+			},
+			"offsets": {
+				"from": 1593080,
+				"to": 1598080
+			},
+			"text": " putting functions inside prompts, using structured outputs to"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:38,080",
+				"to": "00:26:42,440"
+			},
+			"offsets": {
+				"from": 1598080,
+				"to": 1602440
+			},
+			"text": " transform and structure data via LLM's into structured objects."
+		},
+		{
+			"timestamps": {
+				"from": "00:26:42,440",
+				"to": "00:26:48,640"
+			},
+			"offsets": {
+				"from": 1602440,
+				"to": 1608640
+			},
+			"text": " And we've learned about function calling with the open API. Now,"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:48,640",
+				"to": "00:26:51,200"
+			},
+			"offsets": {
+				"from": 1608640,
+				"to": 1611200
+			},
+			"text": " let's build a agent. Let's build something that can"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:51,200",
+				"to": "00:26:55,520"
+			},
+			"offsets": {
+				"from": 1611200,
+				"to": 1615520
+			},
+			"text": " autonomously, autonomously make decisions and execute actions"
+		},
+		{
+			"timestamps": {
+				"from": "00:26:55,520",
+				"to": "00:27:01,000"
+			},
+			"offsets": {
+				"from": 1615520,
+				"to": 1621000
+			},
+			"text": " and loop over the usage of these tools and execution of"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:01,000",
+				"to": "00:27:06,880"
+			},
+			"offsets": {
+				"from": 1621000,
+				"to": 1626880
+			},
+			"text": " actions to perform complex tasks. So the inspiration for this"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:06,880",
+				"to": "00:27:09,680"
+			},
+			"offsets": {
+				"from": 1626880,
+				"to": 1629680
+			},
+			"text": " next demonstration comes from a really awesome paper called"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:09,680",
+				"to": "00:27:14,520"
+			},
+			"offsets": {
+				"from": 1629680,
+				"to": 1634520
+			},
+			"text": " React. And this paper, which I have it listed here in the"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:14,520",
+				"to": "00:27:17,000"
+			},
+			"offsets": {
+				"from": 1634520,
+				"to": 1637000
+			},
+			"text": " notebook, which is called synergizing reasoning and acting"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:17,000",
+				"to": "00:27:20,320"
+			},
+			"offsets": {
+				"from": 1637000,
+				"to": 1640320
+			},
+			"text": " language models. What this paper does is they show that there's"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:20,320",
+				"to": "00:27:23,600"
+			},
+			"offsets": {
+				"from": 1640320,
+				"to": 1643600
+			},
+			"text": " a way that you can prompt the model to incentivize the"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:23,600",
+				"to": "00:27:29,360"
+			},
+			"offsets": {
+				"from": 1643600,
+				"to": 1649360
+			},
+			"text": " interleaving of thoughts, like plans for what to do, and"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:29,600",
+				"to": "00:27:34,800"
+			},
+			"offsets": {
+				"from": 1649600,
+				"to": 1654800
+			},
+			"text": " actions, which mean essentially executing some programs and"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:34,800",
+				"to": "00:27:38,960"
+			},
+			"offsets": {
+				"from": 1654800,
+				"to": 1658960
+			},
+			"text": " function, which will lead to an observation that the model is"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:38,960",
+				"to": "00:27:43,200"
+			},
+			"offsets": {
+				"from": 1658960,
+				"to": 1663200
+			},
+			"text": " going to use to be able to get further and further in solving"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:43,200",
+				"to": "00:27:48,360"
+			},
+			"offsets": {
+				"from": 1663200,
+				"to": 1668360
+			},
+			"text": " the task. So this paper is really cool. And what you can do"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:48,360",
+				"to": "00:27:50,840"
+			},
+			"offsets": {
+				"from": 1668360,
+				"to": 1670840
+			},
+			"text": " with this is what we're going to try to do is we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:50,840",
+				"to": "00:27:55,000"
+			},
+			"offsets": {
+				"from": 1670840,
+				"to": 1675000
+			},
+			"text": " try to build from scratch only only using the LLM API in Python"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:55,000",
+				"to": "00:27:59,280"
+			},
+			"offsets": {
+				"from": 1675000,
+				"to": 1679280
+			},
+			"text": " code. This entire react agent loop, which is a really good way"
+		},
+		{
+			"timestamps": {
+				"from": "00:27:59,280",
+				"to": "00:28:04,960"
+			},
+			"offsets": {
+				"from": 1679280,
+				"to": 1684960
+			},
+			"text": " to understand how modern agents work. So I'm going to, again,"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:04,960",
+				"to": "00:28:08,840"
+			},
+			"offsets": {
+				"from": 1684960,
+				"to": 1688840
+			},
+			"text": " write the read file, write file functions back into the cell"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:08,840",
+				"to": "00:28:13,560"
+			},
+			"offsets": {
+				"from": 1688840,
+				"to": 1693560
+			},
+			"text": " here just to be thorough. Then I'm going to write a little"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:13,560",
+				"to": "00:28:18,080"
+			},
+			"offsets": {
+				"from": 1693560,
+				"to": 1698080
+			},
+			"text": " mapping object here, which is essentially just dictionary"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:18,080",
+				"to": "00:28:22,160"
+			},
+			"offsets": {
+				"from": 1698080,
+				"to": 1702160
+			},
+			"text": " that maps the names read file and write file to the correct"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:22,160",
+				"to": "00:28:26,440"
+			},
+			"offsets": {
+				"from": 1702160,
+				"to": 1706440
+			},
+			"text": " corresponding functions. Okay. Now we're going to have a"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:26,440",
+				"to": "00:28:31,240"
+			},
+			"offsets": {
+				"from": 1706440,
+				"to": 1711240
+			},
+			"text": " list of tools, which is the same as we did before. Okay, it's"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:31,240",
+				"to": "00:28:36,640"
+			},
+			"offsets": {
+				"from": 1711240,
+				"to": 1716640
+			},
+			"text": " pretty similar to the thing that we did before. So it's the"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:36,640",
+				"to": "00:28:40,800"
+			},
+			"offsets": {
+				"from": 1716640,
+				"to": 1720800
+			},
+			"text": " write file read file to descriptions as dictionaries. Okay,"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:40,800",
+				"to": "00:28:46,320"
+			},
+			"offsets": {
+				"from": 1720800,
+				"to": 1726320
+			},
+			"text": " so these are the JSON schemas of those functions. Now, for the"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:46,320",
+				"to": "00:28:49,480"
+			},
+			"offsets": {
+				"from": 1726320,
+				"to": 1729480
+			},
+			"text": " instructions for this model, we're going to have a few things"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:49,480",
+				"to": "00:28:53,920"
+			},
+			"offsets": {
+				"from": 1729480,
+				"to": 1733920
+			},
+			"text": " that we need to address. The first one is this, your careful"
+		},
+		{
+			"timestamps": {
+				"from": "00:28:53,920",
+				"to": "00:28:57,240"
+			},
+			"offsets": {
+				"from": 1733920,
+				"to": 1737240
+			},
+			"text": " system that can use tools to read and write files. Okay, great."
+		},
+		{
+			"timestamps": {
+				"from": "00:28:57,240",
+				"to": "00:29:01,040"
+			},
+			"offsets": {
+				"from": 1737240,
+				"to": 1741040
+			},
+			"text": " If a task involves files, call the appropriate tool with"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:01,040",
+				"to": "00:29:04,520"
+			},
+			"offsets": {
+				"from": 1741040,
+				"to": 1744520
+			},
+			"text": " precise arguments. After two calls, summarize results for the"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:04,520",
+				"to": "00:29:09,400"
+			},
+			"offsets": {
+				"from": 1744520,
+				"to": 1749400
+			},
+			"text": " user, only write files when explicitly asked or when"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:09,400",
+				"to": "00:29:11,880"
+			},
+			"offsets": {
+				"from": 1749400,
+				"to": 1751880
+			},
+			"text": " necessary to complete the task. This is just to increase the"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:11,880",
+				"to": "00:29:17,120"
+			},
+			"offsets": {
+				"from": 1751880,
+				"to": 1757120
+			},
+			"text": " chance of a good two calls. So the model being precise about"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:17,120",
+				"to": "00:29:21,120"
+			},
+			"offsets": {
+				"from": 1757120,
+				"to": 1761120
+			},
+			"text": " calling the right tools. And then if something is ambiguous,"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:21,200",
+				"to": "00:29:24,600"
+			},
+			"offsets": {
+				"from": 1761200,
+				"to": 1764600
+			},
+			"text": " ask a concise clarifying question. When you're done, respond"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:24,600",
+				"to": "00:29:28,040"
+			},
+			"offsets": {
+				"from": 1764600,
+				"to": 1768040
+			},
+			"text": " with final answer. And I'm doing this here just because we"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:28,040",
+				"to": "00:29:32,920"
+			},
+			"offsets": {
+				"from": 1768040,
+				"to": 1772920
+			},
+			"text": " want to be able to parse some indication that a loop of"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:32,920",
+				"to": "00:29:36,040"
+			},
+			"offsets": {
+				"from": 1772920,
+				"to": 1776040
+			},
+			"text": " actions should end. And we can actually provide an answer to"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:36,040",
+				"to": "00:29:44,080"
+			},
+			"offsets": {
+				"from": 1776040,
+				"to": 1784080
+			},
+			"text": " the user. So now I wrote this with AI and just to safely load"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:45,280",
+				"to": "00:29:51,560"
+			},
+			"offsets": {
+				"from": 1785280,
+				"to": 1791560
+			},
+			"text": " the JSON schemas of the tools that were going to be used. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:51,560",
+				"to": "00:29:55,840"
+			},
+			"offsets": {
+				"from": 1791560,
+				"to": 1795840
+			},
+			"text": " then we're going to have something to if a loop goes for too"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:55,840",
+				"to": "00:29:58,400"
+			},
+			"offsets": {
+				"from": 1795840,
+				"to": 1798400
+			},
+			"text": " long, we want to have something like this that summarizes"
+		},
+		{
+			"timestamps": {
+				"from": "00:29:58,400",
+				"to": "00:30:03,360"
+			},
+			"offsets": {
+				"from": 1798400,
+				"to": 1803360
+			},
+			"text": " what happened to the model. And without overloading the context"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:03,360",
+				"to": "00:30:07,240"
+			},
+			"offsets": {
+				"from": 1803360,
+				"to": 1807240
+			},
+			"text": " window of the model, so all the text the model can read. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:07,240",
+				"to": "00:30:10,800"
+			},
+			"offsets": {
+				"from": 1807240,
+				"to": 1810800
+			},
+			"text": " now we're going to finally write level seven, the react agent"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:10,800",
+				"to": "00:30:13,720"
+			},
+			"offsets": {
+				"from": 1810800,
+				"to": 1813720
+			},
+			"text": " loop. And what we're going to have for this function is a"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:13,720",
+				"to": "00:30:18,200"
+			},
+			"offsets": {
+				"from": 1813720,
+				"to": 1818200
+			},
+			"text": " task prompt, which describes what the problem is. And then we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:18,200",
+				"to": "00:30:21,160"
+			},
+			"offsets": {
+				"from": 1818200,
+				"to": 1821160
+			},
+			"text": " going to set the maximum number of turns that the model can"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:21,160",
+				"to": "00:30:25,320"
+			},
+			"offsets": {
+				"from": 1821160,
+				"to": 1825320
+			},
+			"text": " actually loop and use tools to solve the task. Okay, I set the"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:25,320",
+				"to": "00:30:28,480"
+			},
+			"offsets": {
+				"from": 1825320,
+				"to": 1828480
+			},
+			"text": " default to eight, but you can do it for like three. And that should"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:28,480",
+				"to": "00:30:33,960"
+			},
+			"offsets": {
+				"from": 1828480,
+				"to": 1833960
+			},
+			"text": " be fine. Now we're going to start with that input. And here's"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:33,960",
+				"to": "00:30:36,760"
+			},
+			"offsets": {
+				"from": 1833960,
+				"to": 1836760
+			},
+			"text": " what we're going to do. We're going to loop over the maximum"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:36,760",
+				"to": "00:30:40,920"
+			},
+			"offsets": {
+				"from": 1836760,
+				"to": 1840920
+			},
+			"text": " amount of turns that we can do. And each turn involves making a"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:40,920",
+				"to": "00:30:46,080"
+			},
+			"offsets": {
+				"from": 1840920,
+				"to": 1846080
+			},
+			"text": " call to the LLM API, reading and executing the functions that"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:46,080",
+				"to": "00:30:52,160"
+			},
+			"offsets": {
+				"from": 1846080,
+				"to": 1852160
+			},
+			"text": " are called. And then seeing if we've reached the final answer, if"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:52,160",
+				"to": "00:30:54,720"
+			},
+			"offsets": {
+				"from": 1852160,
+				"to": 1854720
+			},
+			"text": " not, we're going to go yet. So for that, we're going to start"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:54,720",
+				"to": "00:30:57,640"
+			},
+			"offsets": {
+				"from": 1854720,
+				"to": 1857640
+			},
+			"text": " with calling the model using the similar structure that we did"
+		},
+		{
+			"timestamps": {
+				"from": "00:30:57,640",
+				"to": "00:31:01,120"
+			},
+			"offsets": {
+				"from": 1857640,
+				"to": 1861120
+			},
+			"text": " before. And now, so what we're going to be doing here is we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:01,120",
+				"to": "00:31:06,600"
+			},
+			"offsets": {
+				"from": 1861120,
+				"to": 1866600
+			},
+			"text": " going to be taking all the function calls that we identifying"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:06,600",
+				"to": "00:31:10,320"
+			},
+			"offsets": {
+				"from": 1866600,
+				"to": 1870320
+			},
+			"text": " the model's response output. And we're going to execute those"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:10,320",
+				"to": "00:31:14,640"
+			},
+			"offsets": {
+				"from": 1870320,
+				"to": 1874640
+			},
+			"text": " function calls, just like we did in the previous example. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:14,640",
+				"to": "00:31:17,560"
+			},
+			"offsets": {
+				"from": 1874640,
+				"to": 1877560
+			},
+			"text": " we're going to identify them by the name. And then we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:17,560",
+				"to": "00:31:22,880"
+			},
+			"offsets": {
+				"from": 1877560,
+				"to": 1882880
+			},
+			"text": " use the pi tools mapping dictionary that we built for the"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:22,880",
+				"to": "00:31:26,520"
+			},
+			"offsets": {
+				"from": 1882880,
+				"to": 1886520
+			},
+			"text": " write file and read file. And then we're going to use that to get"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:26,520",
+				"to": "00:31:30,880"
+			},
+			"offsets": {
+				"from": 1886520,
+				"to": 1890880
+			},
+			"text": " the actual function to be able to execute that function. So you"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:30,880",
+				"to": "00:31:33,360"
+			},
+			"offsets": {
+				"from": 1890880,
+				"to": 1893360
+			},
+			"text": " execute the function, we write a little bit of some try"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:33,360",
+				"to": "00:31:37,760"
+			},
+			"offsets": {
+				"from": 1893360,
+				"to": 1897760
+			},
+			"text": " accept statements to make sure that we can handle some error"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:37,800",
+				"to": "00:31:41,960"
+			},
+			"offsets": {
+				"from": 1897800,
+				"to": 1901960
+			},
+			"text": " messages. And then we append the output of the execution of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:41,960",
+				"to": "00:31:45,560"
+			},
+			"offsets": {
+				"from": 1901960,
+				"to": 1905560
+			},
+			"text": " functions to the input list that the model is going to be able to"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:45,560",
+				"to": "00:31:49,360"
+			},
+			"offsets": {
+				"from": 1905560,
+				"to": 1909360
+			},
+			"text": " see at the end to be able to compile a proper response to the"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:49,360",
+				"to": "00:31:56,160"
+			},
+			"offsets": {
+				"from": 1909360,
+				"to": 1916160
+			},
+			"text": " user. And what we do lastly is if and when the model produces"
+		},
+		{
+			"timestamps": {
+				"from": "00:31:56,160",
+				"to": "00:32:00,920"
+			},
+			"offsets": {
+				"from": 1916160,
+				"to": 1920920
+			},
+			"text": " the final answer text inside of the output, that means that we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:00,920",
+				"to": "00:32:03,320"
+			},
+			"offsets": {
+				"from": 1920920,
+				"to": 1923320
+			},
+			"text": " done, we don't have to loop anymore, and we can provide an"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:03,320",
+				"to": "00:32:07,400"
+			},
+			"offsets": {
+				"from": 1923320,
+				"to": 1927400
+			},
+			"text": " answer to the user. So we parse that from the output using the"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:07,400",
+				"to": "00:32:13,000"
+			},
+			"offsets": {
+				"from": 1927400,
+				"to": 1933000
+			},
+			"text": " rejects module. And then we return, and if we don't for some"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:13,000",
+				"to": "00:32:17,840"
+			},
+			"offsets": {
+				"from": 1933000,
+				"to": 1937840
+			},
+			"text": " reason get to get to an actual output from the agent after the"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:17,840",
+				"to": "00:32:22,560"
+			},
+			"offsets": {
+				"from": 1937840,
+				"to": 1942560
+			},
+			"text": " all of the terms that we set with the max_turns parameter, we"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:22,560",
+				"to": "00:32:29,000"
+			},
+			"offsets": {
+				"from": 1942560,
+				"to": 1949000
+			},
+			"text": " just stop because we reach the maximum. All right. So now, we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:29,000",
+				"to": "00:32:32,360"
+			},
+			"offsets": {
+				"from": 1949000,
+				"to": 1952360
+			},
+			"text": " going to set up a complex task that involves two actions,"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:32,360",
+				"to": "00:32:36,120"
+			},
+			"offsets": {
+				"from": 1952360,
+				"to": 1956120
+			},
+			"text": " right, reading a file and then writing a summary of it to another"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:36,120",
+				"to": "00:32:40,840"
+			},
+			"offsets": {
+				"from": 1956120,
+				"to": 1960840
+			},
+			"text": " file. And we're going to test it with our react agent loop. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:40,840",
+				"to": "00:32:44,760"
+			},
+			"offsets": {
+				"from": 1960840,
+				"to": 1964760
+			},
+			"text": " we're going to see if it works. Perfect. Seems like it works. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:44,760",
+				"to": "00:32:48,840"
+			},
+			"offsets": {
+				"from": 1964760,
+				"to": 1968840
+			},
+			"text": " we can test that by going to the summary file. We see that we"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:48,840",
+				"to": "00:32:51,720"
+			},
+			"offsets": {
+				"from": 1968840,
+				"to": 1971720
+			},
+			"text": " got the summary file. And we see that it's talking about"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:51,720",
+				"to": "00:32:55,080"
+			},
+			"offsets": {
+				"from": 1971720,
+				"to": 1975080
+			},
+			"text": " embeddings. If we go to the sample input file, we see that the"
+		},
+		{
+			"timestamps": {
+				"from": "00:32:55,080",
+				"to": "00:33:00,280"
+			},
+			"offsets": {
+				"from": 1975080,
+				"to": 1980280
+			},
+			"text": " input was about embeddings. So it seems like it works. So this"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:00,280",
+				"to": "00:33:02,760"
+			},
+			"offsets": {
+				"from": 1980280,
+				"to": 1982760
+			},
+			"text": " is great. What we're going to do now is we're going to go to the"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:02,760",
+				"to": "00:33:07,240"
+			},
+			"offsets": {
+				"from": 1982760,
+				"to": 1987240
+			},
+			"text": " final level, let's say, which is the actual Agentec workflow. And"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:07,240",
+				"to": "00:33:10,360"
+			},
+			"offsets": {
+				"from": 1987240,
+				"to": 1990360
+			},
+			"text": " this is going to be an Agentec workflow that uses agents. But"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:10,360",
+				"to": "00:33:15,000"
+			},
+			"offsets": {
+				"from": 1990360,
+				"to": 1995000
+			},
+			"text": " instead of the end goal being the agent, the agent is just a step"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:15,000",
+				"to": "00:33:20,680"
+			},
+			"offsets": {
+				"from": 1995000,
+				"to": 2000680
+			},
+			"text": " in a more complex system that merges the idea of simpler steps"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:20,680",
+				"to": "00:33:26,920"
+			},
+			"offsets": {
+				"from": 2000680,
+				"to": 2006920
+			},
+			"text": " using just a simple LML call with possible agents, depending on"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:26,920",
+				"to": "00:33:31,560"
+			},
+			"offsets": {
+				"from": 2006920,
+				"to": 2011560
+			},
+			"text": " the routing mechanics of the previous input. What I mean by that"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:31,560",
+				"to": "00:33:34,440"
+			},
+			"offsets": {
+				"from": 2011560,
+				"to": 2014440
+			},
+			"text": " is we're going to take some input. And then we're going to use a"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:34,440",
+				"to": "00:33:38,520"
+			},
+			"offsets": {
+				"from": 2014440,
+				"to": 2018520
+			},
+			"text": " router LML call like we did in level three. Remember, we did first"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:38,520",
+				"to": "00:33:43,160"
+			},
+			"offsets": {
+				"from": 2018520,
+				"to": 2023160
+			},
+			"text": " test it for a LML call. And then we did a chaining of LML calls."
+		},
+		{
+			"timestamps": {
+				"from": "00:33:43,160",
+				"to": "00:33:48,360"
+			},
+			"offsets": {
+				"from": 2023160,
+				"to": 2028360
+			},
+			"text": " And the third example was the routing procedure, where it takes an input and"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:48,360",
+				"to": "00:33:52,760"
+			},
+			"offsets": {
+				"from": 2028360,
+				"to": 2032760
+			},
+			"text": " then it can route to one LML call or another. We're going to do that"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:52,760",
+				"to": "00:33:55,400"
+			},
+			"offsets": {
+				"from": 2032760,
+				"to": 2035400
+			},
+			"text": " same thing here. But this time, since we've learned about"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:55,400",
+				"to": "00:33:58,280"
+			},
+			"offsets": {
+				"from": 2035400,
+				"to": 2038280
+			},
+			"text": " structured outputs, we're going to be using structured outputs to do the"
+		},
+		{
+			"timestamps": {
+				"from": "00:33:58,280",
+				"to": "00:34:01,880"
+			},
+			"offsets": {
+				"from": 2038280,
+				"to": 2041880
+			},
+			"text": " routing mechanics. And what we're going to do next is we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:01,880",
+				"to": "00:34:05,080"
+			},
+			"offsets": {
+				"from": 2041880,
+				"to": 2045080
+			},
+			"text": " route to either a jokes agent, which is going to be some agent that can"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:05,080",
+				"to": "00:34:10,840"
+			},
+			"offsets": {
+				"from": 2045080,
+				"to": 2050840
+			},
+			"text": " write to files and creates jokes or to a web search agent, which can"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:10,840",
+				"to": "00:34:15,560"
+			},
+			"offsets": {
+				"from": 2050840,
+				"to": 2055560
+			},
+			"text": " search the web and also write to files. Then the output is going to be produced"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:15,560",
+				"to": "00:34:18,920"
+			},
+			"offsets": {
+				"from": 2055560,
+				"to": 2058920
+			},
+			"text": " by either of those agents, depending on the input."
+		},
+		{
+			"timestamps": {
+				"from": "00:34:18,920",
+				"to": "00:34:22,680"
+			},
+			"offsets": {
+				"from": 2058920,
+				"to": 2062680
+			},
+			"text": " That's what we're going to do. So to start things off, we're going to set up"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:22,680",
+				"to": "00:34:26,840"
+			},
+			"offsets": {
+				"from": 2062680,
+				"to": 2066840
+			},
+			"text": " the routing mechanics. So to do that, we're going to set up a"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:26,840",
+				"to": "00:34:29,960"
+			},
+			"offsets": {
+				"from": 2066840,
+				"to": 2069960
+			},
+			"text": " class called router output. And this class is going to have one"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:29,960",
+				"to": "00:34:34,920"
+			},
+			"offsets": {
+				"from": 2069960,
+				"to": 2074920
+			},
+			"text": " attribute called category, which is going to be either the"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:34,920",
+				"to": "00:34:38,760"
+			},
+			"offsets": {
+				"from": 2074920,
+				"to": 2078760
+			},
+			"text": " string joke or the web search. So it's a simple classification"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:38,760",
+				"to": "00:34:42,760"
+			},
+			"offsets": {
+				"from": 2078760,
+				"to": 2082760
+			},
+			"text": " output. And then we're going to describe category of the input"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:42,760",
+				"to": "00:34:46,360"
+			},
+			"offsets": {
+				"from": 2082760,
+				"to": 2086360
+			},
+			"text": " joke or web search. And then finally, we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:46,360",
+				"to": "00:34:51,080"
+			},
+			"offsets": {
+				"from": 2086360,
+				"to": 2091080
+			},
+			"text": " make a test call to the LML to the OpenAI Responses API,"
+		},
+		{
+			"timestamps": {
+				"from": "00:34:51,080",
+				"to": "00:34:55,000"
+			},
+			"offsets": {
+				"from": 2091080,
+				"to": 2095000
+			},
+			"text": " setting the text format to the router output to see if this thing works."
+		},
+		{
+			"timestamps": {
+				"from": "00:34:55,000",
+				"to": "00:34:58,760"
+			},
+			"offsets": {
+				"from": 2095000,
+				"to": 2098760
+			},
+			"text": " So I'm going to test that out right now. Perfect. It seems like it works."
+		},
+		{
+			"timestamps": {
+				"from": "00:34:58,760",
+				"to": "00:35:04,360"
+			},
+			"offsets": {
+				"from": 2098760,
+				"to": 2104360
+			},
+			"text": " It was able to identify that the input was about creating jokes."
+		},
+		{
+			"timestamps": {
+				"from": "00:35:04,360",
+				"to": "00:35:08,120"
+			},
+			"offsets": {
+				"from": 2104360,
+				"to": 2108120
+			},
+			"text": " Pretty simple problem. And now what we're going to do is we're going to set up"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:08,120",
+				"to": "00:35:12,040"
+			},
+			"offsets": {
+				"from": 2108120,
+				"to": 2112040
+			},
+			"text": " the tools for these agents. So for the Joker agent, it's just a simple"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:12,040",
+				"to": "00:35:16,280"
+			},
+			"offsets": {
+				"from": 2112040,
+				"to": 2116280
+			},
+			"text": " write file tool. And for the web search agent is the"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:16,280",
+				"to": "00:35:20,360"
+			},
+			"offsets": {
+				"from": 2116280,
+				"to": 2120360
+			},
+			"text": " write file tool and the ability to search the web, which in the OpenAI"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:20,360",
+				"to": "00:35:24,760"
+			},
+			"offsets": {
+				"from": 2120360,
+				"to": 2124760
+			},
+			"text": " Responses API, it already has a built-in tool for a web search, which we're"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:24,760",
+				"to": "00:35:29,160"
+			},
+			"offsets": {
+				"from": 2124760,
+				"to": 2129160
+			},
+			"text": " going to use. So that's what we have on the Joker"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:29,160",
+				"to": "00:35:32,360"
+			},
+			"offsets": {
+				"from": 2129160,
+				"to": 2132360
+			},
+			"text": " agent tools, pretty similar to what we did before. But this time is just for the"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:32,360",
+				"to": "00:35:37,000"
+			},
+			"offsets": {
+				"from": 2132360,
+				"to": 2137000
+			},
+			"text": " write file and web search, we have the write file tool."
+		},
+		{
+			"timestamps": {
+				"from": "00:35:37,000",
+				"to": "00:35:41,000"
+			},
+			"offsets": {
+				"from": 2137000,
+				"to": 2141000
+			},
+			"text": " And we have this, which is the statement that indicates the"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:41,000",
+				"to": "00:35:45,560"
+			},
+			"offsets": {
+				"from": 2141000,
+				"to": 2145560
+			},
+			"text": " OpenAI Responses API that the tool to use is the built-in"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:45,560",
+				"to": "00:35:50,600"
+			},
+			"offsets": {
+				"from": 2145560,
+				"to": 2150600
+			},
+			"text": " web search tool. Then I, this is just because we're doing"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:50,600",
+				"to": "00:35:54,680"
+			},
+			"offsets": {
+				"from": 2150600,
+				"to": 2154680
+			},
+			"text": " this from scratch. I did a little dictionary that"
+		},
+		{
+			"timestamps": {
+				"from": "00:35:54,680",
+				"to": "00:36:01,080"
+			},
+			"offsets": {
+				"from": 2154680,
+				"to": 2161080
+			},
+			"text": " if the routing call is joke, we're going to route it to the Joker agent with"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:01,080",
+				"to": "00:36:05,000"
+			},
+			"offsets": {
+				"from": 2161080,
+				"to": 2165000
+			},
+			"text": " these instructions and these tools. And if it's web search, we're going to route"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:05,000",
+				"to": "00:36:08,200"
+			},
+			"offsets": {
+				"from": 2165000,
+				"to": 2168200
+			},
+			"text": " it to the web search agent with these instructions"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:08,200",
+				"to": "00:36:16,040"
+			},
+			"offsets": {
+				"from": 2168200,
+				"to": 2176040
+			},
+			"text": " and these tools. Pretty simple, right? So now we're going to run that."
+		},
+		{
+			"timestamps": {
+				"from": "00:36:16,040",
+				"to": "00:36:19,000"
+			},
+			"offsets": {
+				"from": 2176040,
+				"to": 2179000
+			},
+			"text": " All right. So after that, what we're going to do is we're going to set up the"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:19,000",
+				"to": "00:36:23,080"
+			},
+			"offsets": {
+				"from": 2179000,
+				"to": 2183080
+			},
+			"text": " this tool map variable, which is just a dictionary that maps the write file"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:23,080",
+				"to": "00:36:27,000"
+			},
+			"offsets": {
+				"from": 2183080,
+				"to": 2187000
+			},
+			"text": " to the function. So we run that. And now what we're going to do is we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:27,000",
+				"to": "00:36:31,400"
+			},
+			"offsets": {
+				"from": 2187000,
+				"to": 2191400
+			},
+			"text": " define a react agent loop similar to the one that we did before,"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:31,400",
+				"to": "00:36:35,160"
+			},
+			"offsets": {
+				"from": 2191400,
+				"to": 2195160
+			},
+			"text": " but with a catch. This is going to be a more modular"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:35,160",
+				"to": "00:36:39,400"
+			},
+			"offsets": {
+				"from": 2195160,
+				"to": 2199400
+			},
+			"text": " function that allows us to create specialized agents."
+		},
+		{
+			"timestamps": {
+				"from": "00:36:39,400",
+				"to": "00:36:43,560"
+			},
+			"offsets": {
+				"from": 2199400,
+				"to": 2203560
+			},
+			"text": " So it will take in the input. It will take in"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:43,560",
+				"to": "00:36:47,480"
+			},
+			"offsets": {
+				"from": 2203560,
+				"to": 2207480
+			},
+			"text": " the agent dictionary, which is going to be either this"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:47,480",
+				"to": "00:36:52,840"
+			},
+			"offsets": {
+				"from": 2207480,
+				"to": 2212840
+			},
+			"text": " or this, which essentially takes three keys, the name, the instructions and the"
+		},
+		{
+			"timestamps": {
+				"from": "00:36:52,840",
+				"to": "00:36:56,360"
+			},
+			"offsets": {
+				"from": 2212840,
+				"to": 2216360
+			},
+			"text": " tools and the max turns, just like we did before."
+		},
+		{
+			"timestamps": {
+				"from": "00:36:56,360",
+				"to": "00:37:00,600"
+			},
+			"offsets": {
+				"from": 2216360,
+				"to": 2220600
+			},
+			"text": " And this is going to be very similar to before, but with the addition"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:00,600",
+				"to": "00:37:05,080"
+			},
+			"offsets": {
+				"from": 2220600,
+				"to": 2225080
+			},
+			"text": " that now we can actually make specialized agents based on the"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:05,080",
+				"to": "00:37:08,920"
+			},
+			"offsets": {
+				"from": 2225080,
+				"to": 2228920
+			},
+			"text": " custom set of instructions and a list of tools,"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:08,920",
+				"to": "00:37:11,960"
+			},
+			"offsets": {
+				"from": 2228920,
+				"to": 2231960
+			},
+			"text": " similar to what different frameworks do out there,"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:11,960",
+				"to": "00:37:15,800"
+			},
+			"offsets": {
+				"from": 2231960,
+				"to": 2235800
+			},
+			"text": " where you can create specialized agents with very simple input."
+		},
+		{
+			"timestamps": {
+				"from": "00:37:15,800",
+				"to": "00:37:19,640"
+			},
+			"offsets": {
+				"from": 2235800,
+				"to": 2239640
+			},
+			"text": " So we're going to set up our input list. We're going to set up the agent tools"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:19,640",
+				"to": "00:37:23,320"
+			},
+			"offsets": {
+				"from": 2239640,
+				"to": 2243320
+			},
+			"text": " by extracting it from the agent dictionary."
+		},
+		{
+			"timestamps": {
+				"from": "00:37:23,320",
+				"to": "00:37:26,440"
+			},
+			"offsets": {
+				"from": 2243320,
+				"to": 2246440
+			},
+			"text": " And then we're going to set up the loop similar to what we did before."
+		},
+		{
+			"timestamps": {
+				"from": "00:37:26,440",
+				"to": "00:37:30,440"
+			},
+			"offsets": {
+				"from": 2246440,
+				"to": 2250440
+			},
+			"text": " This is going to loop is going to make a call to the open API"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:30,440",
+				"to": "00:37:35,560"
+			},
+			"offsets": {
+				"from": 2250440,
+				"to": 2255560
+			},
+			"text": " with the instructions for the agent that will be"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:35,560",
+				"to": "00:37:39,640"
+			},
+			"offsets": {
+				"from": 2255560,
+				"to": 2259640
+			},
+			"text": " used, selected by the router call. And then we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:39,640",
+				"to": "00:37:43,400"
+			},
+			"offsets": {
+				"from": 2259640,
+				"to": 2263400
+			},
+			"text": " put that into the input list so that this"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:43,400",
+				"to": "00:37:47,000"
+			},
+			"offsets": {
+				"from": 2263400,
+				"to": 2267000
+			},
+			"text": " so that information will be stored in the"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:47,000",
+				"to": "00:37:51,560"
+			},
+			"offsets": {
+				"from": 2267000,
+				"to": 2271560
+			},
+			"text": " log of the agent. We're going to execute the function calls."
+		},
+		{
+			"timestamps": {
+				"from": "00:37:51,560",
+				"to": "00:37:57,080"
+			},
+			"offsets": {
+				"from": 2271560,
+				"to": 2277080
+			},
+			"text": " Remember folks that if the agent uses the web search tool,"
+		},
+		{
+			"timestamps": {
+				"from": "00:37:57,080",
+				"to": "00:38:02,120"
+			},
+			"offsets": {
+				"from": 2277080,
+				"to": 2282120
+			},
+			"text": " this function call is this is not necessary because the web search"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:02,120",
+				"to": "00:38:05,960"
+			},
+			"offsets": {
+				"from": 2282120,
+				"to": 2285960
+			},
+			"text": " is executed by the opening API by default."
+		},
+		{
+			"timestamps": {
+				"from": "00:38:05,960",
+				"to": "00:38:10,200"
+			},
+			"offsets": {
+				"from": 2285960,
+				"to": 2290200
+			},
+			"text": " So this is just for functions that are defined outside of the scope of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:10,200",
+				"to": "00:38:14,440"
+			},
+			"offsets": {
+				"from": 2290200,
+				"to": 2294440
+			},
+			"text": " building tools. So then we're going to extract."
+		},
+		{
+			"timestamps": {
+				"from": "00:38:14,440",
+				"to": "00:38:18,280"
+			},
+			"offsets": {
+				"from": 2294440,
+				"to": 2298280
+			},
+			"text": " We're going to map it exactly similar to what we did before."
+		},
+		{
+			"timestamps": {
+				"from": "00:38:18,280",
+				"to": "00:38:23,000"
+			},
+			"offsets": {
+				"from": 2298280,
+				"to": 2303000
+			},
+			"text": " And the reason why I'm rewriting this is because I want to make each of these"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:23,000",
+				"to": "00:38:27,240"
+			},
+			"offsets": {
+				"from": 2303000,
+				"to": 2307240
+			},
+			"text": " levels kind of like self-contained. Then we're appending the outputs of the"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:27,240",
+				"to": "00:38:29,720"
+			},
+			"offsets": {
+				"from": 2307240,
+				"to": 2309720
+			},
+			"text": " function call execution of the function calls."
+		},
+		{
+			"timestamps": {
+				"from": "00:38:29,720",
+				"to": "00:38:33,000"
+			},
+			"offsets": {
+				"from": 2309720,
+				"to": 2313000
+			},
+			"text": " And we're doing similar to what we did before."
+		},
+		{
+			"timestamps": {
+				"from": "00:38:33,000",
+				"to": "00:38:37,240"
+			},
+			"offsets": {
+				"from": 2313000,
+				"to": 2317240
+			},
+			"text": " We're scraping the final answer. We're scraping the final answer with the rejects"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:37,240",
+				"to": "00:38:40,760"
+			},
+			"offsets": {
+				"from": 2317240,
+				"to": 2320760
+			},
+			"text": " module and then appending everything and"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:40,760",
+				"to": "00:38:45,080"
+			},
+			"offsets": {
+				"from": 2320760,
+				"to": 2325080
+			},
+			"text": " returning stopped if the maximum number of turns is"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:45,080",
+				"to": "00:38:50,600"
+			},
+			"offsets": {
+				"from": 2325080,
+				"to": 2330600
+			},
+			"text": " reached without a conclusion. Okay, perfect. So this looks good."
+		},
+		{
+			"timestamps": {
+				"from": "00:38:50,600",
+				"to": "00:38:55,400"
+			},
+			"offsets": {
+				"from": 2330600,
+				"to": 2335400
+			},
+			"text": " And now we can run this and we can finally write"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:55,400",
+				"to": "00:38:58,360"
+			},
+			"offsets": {
+				"from": 2335400,
+				"to": 2338360
+			},
+			"text": " the function that represents level 8 which is the"
+		},
+		{
+			"timestamps": {
+				"from": "00:38:58,360",
+				"to": "00:39:01,960"
+			},
+			"offsets": {
+				"from": 2338360,
+				"to": 2341960
+			},
+			"text": " agentic workflow using this agent as a step. So"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:01,960",
+				"to": "00:39:05,640"
+			},
+			"offsets": {
+				"from": 2341960,
+				"to": 2345640
+			},
+			"text": " remember what we're building is a simple agentic workflow that takes"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:05,640",
+				"to": "00:39:09,320"
+			},
+			"offsets": {
+				"from": 2345640,
+				"to": 2349320
+			},
+			"text": " first a router which is going to use an element to route"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:09,320",
+				"to": "00:39:13,720"
+			},
+			"offsets": {
+				"from": 2349320,
+				"to": 2353720
+			},
+			"text": " the call to the input to either the jokes agent or the web search agent."
+		},
+		{
+			"timestamps": {
+				"from": "00:39:13,720",
+				"to": "00:39:16,280"
+			},
+			"offsets": {
+				"from": 2353720,
+				"to": 2356280
+			},
+			"text": " And from there we're going to provide a final output."
+		},
+		{
+			"timestamps": {
+				"from": "00:39:16,280",
+				"to": "00:39:22,280"
+			},
+			"offsets": {
+				"from": 2356280,
+				"to": 2362280
+			},
+			"text": " Super simple. So when we go back what we're going to do is we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:22,280",
+				"to": "00:39:26,040"
+			},
+			"offsets": {
+				"from": 2362280,
+				"to": 2366040
+			},
+			"text": " start with the router. So we're going to"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:26,040",
+				"to": "00:39:30,760"
+			},
+			"offsets": {
+				"from": 2366040,
+				"to": 2370760
+			},
+			"text": " obtain the classification either jokes or web search."
+		},
+		{
+			"timestamps": {
+				"from": "00:39:30,760",
+				"to": "00:39:35,560"
+			},
+			"offsets": {
+				"from": 2370760,
+				"to": 2375560
+			},
+			"text": " Then we're going to, based on that, we're going to select the appropriate agent"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:35,560",
+				"to": "00:39:39,000"
+			},
+			"offsets": {
+				"from": 2375560,
+				"to": 2379000
+			},
+			"text": " and the output is going to be the execution of that agent."
+		},
+		{
+			"timestamps": {
+				"from": "00:39:39,000",
+				"to": "00:39:45,320"
+			},
+			"offsets": {
+				"from": 2379000,
+				"to": 2385320
+			},
+			"text": " That's it. Super simple. Super easy. And we were able to reproduce without having"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:45,320",
+				"to": "00:39:49,560"
+			},
+			"offsets": {
+				"from": 2385320,
+				"to": 2389560
+			},
+			"text": " to use external framework or anything like that this"
+		},
+		{
+			"timestamps": {
+				"from": "00:39:49,560",
+				"to": "00:39:53,880"
+			},
+			"offsets": {
+				"from": 2389560,
+				"to": 2393880
+			},
+			"text": " agentic workflow using plain Python code and the LLM API."
+		},
+		{
+			"timestamps": {
+				"from": "00:39:53,880",
+				"to": "00:39:58,120"
+			},
+			"offsets": {
+				"from": 2393880,
+				"to": 2398120
+			},
+			"text": " We're now using the OpenAI agents SDK. We're now using an agentic framework."
+		},
+		{
+			"timestamps": {
+				"from": "00:39:58,120",
+				"to": "00:40:01,160"
+			},
+			"offsets": {
+				"from": 2398120,
+				"to": 2401160
+			},
+			"text": " We're building everything ourselves to understand"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:01,160",
+				"to": "00:40:06,120"
+			},
+			"offsets": {
+				"from": 2401160,
+				"to": 2406120
+			},
+			"text": " under the hood what's going on with these agents or agentic workflows."
+		},
+		{
+			"timestamps": {
+				"from": "00:40:06,120",
+				"to": "00:40:11,960"
+			},
+			"offsets": {
+				"from": 2406120,
+				"to": 2411960
+			},
+			"text": " So now that we did that we can run this code."
+		},
+		{
+			"timestamps": {
+				"from": "00:40:11,960",
+				"to": "00:40:15,400"
+			},
+			"offsets": {
+				"from": 2411960,
+				"to": 2415400
+			},
+			"text": " And now we're going to make some tests. So the first one is going to be about"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:15,400",
+				"to": "00:40:19,720"
+			},
+			"offsets": {
+				"from": 2415400,
+				"to": 2419720
+			},
+			"text": " jokes. So pretty simple. Let's see if this works."
+		},
+		{
+			"timestamps": {
+				"from": "00:40:19,720",
+				"to": "00:40:24,440"
+			},
+			"offsets": {
+				"from": 2419720,
+				"to": 2424440
+			},
+			"text": " We're going to run it. So this is just tell me a joke about AI."
+		},
+		{
+			"timestamps": {
+				"from": "00:40:24,440",
+				"to": "00:40:28,280"
+			},
+			"offsets": {
+				"from": 2424440,
+				"to": 2428280
+			},
+			"text": " Perfect. It works perfectly. So as you can see"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:28,280",
+				"to": "00:40:33,320"
+			},
+			"offsets": {
+				"from": 2428280,
+				"to": 2433320
+			},
+			"text": " it created a joke. Now let's look at something that involves"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:33,320",
+				"to": "00:40:36,920"
+			},
+			"offsets": {
+				"from": 2433320,
+				"to": 2436920
+			},
+			"text": " writing the jokes but then also writing the file."
+		},
+		{
+			"timestamps": {
+				"from": "00:40:36,920",
+				"to": "00:40:40,680"
+			},
+			"offsets": {
+				"from": 2436920,
+				"to": 2440680
+			},
+			"text": " So that means that two actions have to be executed."
+		},
+		{
+			"timestamps": {
+				"from": "00:40:40,680",
+				"to": "00:40:45,880"
+			},
+			"offsets": {
+				"from": 2440680,
+				"to": 2445880
+			},
+			"text": " So let's see what happens here. All right, perfect. We can see that two iterations"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:45,880",
+				"to": "00:40:50,360"
+			},
+			"offsets": {
+				"from": 2445880,
+				"to": 2450360
+			},
+			"text": " were needed for this agent to finish and it seemed to have created the"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:50,360",
+				"to": "00:40:55,240"
+			},
+			"offsets": {
+				"from": 2450360,
+				"to": 2455240
+			},
+			"text": " the right file so we can take a look. Perfect. So it created five jokes, saved"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:55,240",
+				"to": "00:40:59,080"
+			},
+			"offsets": {
+				"from": 2455240,
+				"to": 2459080
+			},
+			"text": " them to file. Beautiful. Final test we're going to do"
+		},
+		{
+			"timestamps": {
+				"from": "00:40:59,080",
+				"to": "00:41:03,000"
+			},
+			"offsets": {
+				"from": 2459080,
+				"to": 2463000
+			},
+			"text": " is the input for the web search agent. So we're going to research the latest"
+		},
+		{
+			"timestamps": {
+				"from": "00:41:03,000",
+				"to": "00:41:06,280"
+			},
+			"offsets": {
+				"from": 2463000,
+				"to": 2466280
+			},
+			"text": " papers from 2025 about building agentic workflows."
+		},
+		{
+			"timestamps": {
+				"from": "00:41:06,280",
+				"to": "00:41:10,600"
+			},
+			"offsets": {
+				"from": 2466280,
+				"to": 2470600
+			},
+			"text": " And we're going to save that to a file called agentic workflows"
+		},
+		{
+			"timestamps": {
+				"from": "00:41:10,600",
+				"to": "00:41:15,400"
+			},
+			"offsets": {
+				"from": 2470600,
+				"to": 2475400
+			},
+			"text": " 25 summary. So now we're going to test this input"
+		},
+		{
+			"timestamps": {
+				"from": "00:41:15,400",
+				"to": "00:41:18,440"
+			},
+			"offsets": {
+				"from": 2475400,
+				"to": 2478440
+			},
+			"text": " on our workflow and we're going to see if this works."
+		},
+		{
+			"timestamps": {
+				"from": "00:41:18,440",
+				"to": "00:41:22,440"
+			},
+			"offsets": {
+				"from": 2478440,
+				"to": 2482440
+			},
+			"text": " All right, so the router output is correct. Web search in the selected"
+		},
+		{
+			"timestamps": {
+				"from": "00:41:22,440",
+				"to": "00:41:25,800"
+			},
+			"offsets": {
+				"from": 2482440,
+				"to": 2485800
+			},
+			"text": " agent was the web search agent so everything is working so far."
+		},
+		{
+			"timestamps": {
+				"from": "00:41:25,800",
+				"to": "00:41:29,880"
+			},
+			"offsets": {
+				"from": 2485800,
+				"to": 2489880
+			},
+			"text": " All right, perfect. We're done running. It took like a minute 13 seconds"
+		},
+		{
+			"timestamps": {
+				"from": "00:41:29,880",
+				"to": "00:41:33,800"
+			},
+			"offsets": {
+				"from": 2489880,
+				"to": 2493800
+			},
+			"text": " but it seems like it searched the web and it saved to a file."
+		},
+		{
+			"timestamps": {
+				"from": "00:41:33,800",
+				"to": "00:41:39,000"
+			},
+			"offsets": {
+				"from": 2493800,
+				"to": 2499000
+			},
+			"text": " So we're going to look for that file. Beautiful. Look at that."
+		},
+		{
+			"timestamps": {
+				"from": "00:41:39,000",
+				"to": "00:41:43,320"
+			},
+			"offsets": {
+				"from": 2499000,
+				"to": 2503320
+			},
+			"text": " It looked, created a very nice report, has a bunch of papers."
+		},
+		{
+			"timestamps": {
+				"from": "00:41:43,320",
+				"to": "00:41:49,640"
+			},
+			"offsets": {
+				"from": 2503320,
+				"to": 2509640
+			},
+			"text": " I'm pretty certain that everything worked out and if I wasn't I could"
+		},
+		{
+			"timestamps": {
+				"from": "00:41:49,640",
+				"to": "00:41:53,640"
+			},
+			"offsets": {
+				"from": 2509640,
+				"to": 2513640
+			},
+			"text": " inspect the intermediary outputs of this function."
+		},
+		{
+			"timestamps": {
+				"from": "00:41:53,640",
+				"to": "00:41:57,240"
+			},
+			"offsets": {
+				"from": 2513640,
+				"to": 2517240
+			},
+			"text": " But for now that's it. So today in this video you've learned"
+		},
+		{
+			"timestamps": {
+				"from": "00:41:57,240",
+				"to": "00:42:00,520"
+			},
+			"offsets": {
+				"from": 2517240,
+				"to": 2520520
+			},
+			"text": " like eight levels of complexity to get to an"
+		},
+		{
+			"timestamps": {
+				"from": "00:42:00,520",
+				"to": "00:42:04,520"
+			},
+			"offsets": {
+				"from": 2520520,
+				"to": 2524520
+			},
+			"text": " agentic workflow that uses an agent just as a step in a more complex"
+		},
+		{
+			"timestamps": {
+				"from": "00:42:04,520",
+				"to": "00:42:09,480"
+			},
+			"offsets": {
+				"from": 2524520,
+				"to": 2529480
+			},
+			"text": " hybrid workflow. We've talked about LM calling, chaining,"
+		},
+		{
+			"timestamps": {
+				"from": "00:42:09,480",
+				"to": "00:42:13,000"
+			},
+			"offsets": {
+				"from": 2529480,
+				"to": 2533000
+			},
+			"text": " routing, all the way up to agents and agentic workflows."
+		},
+		{
+			"timestamps": {
+				"from": "00:42:13,000",
+				"to": "00:42:15,800"
+			},
+			"offsets": {
+				"from": 2533000,
+				"to": 2535800
+			},
+			"text": " We've tried to do everything kind of from scratch"
+		},
+		{
+			"timestamps": {
+				"from": "00:42:15,800",
+				"to": "00:42:19,320"
+			},
+			"offsets": {
+				"from": 2535800,
+				"to": 2539320
+			},
+			"text": " so that you understand the mechanics of function calling, structured outputs,"
+		},
+		{
+			"timestamps": {
+				"from": "00:42:19,320",
+				"to": "00:42:23,480"
+			},
+			"offsets": {
+				"from": 2539320,
+				"to": 2543480
+			},
+			"text": " routing patterns, and things like that. I think those topics are really important"
+		},
+		{
+			"timestamps": {
+				"from": "00:42:23,480",
+				"to": "00:42:28,360"
+			},
+			"offsets": {
+				"from": 2543480,
+				"to": 2548360
+			},
+			"text": " if you want to understand how to build off awesome agentic workflows."
+		},
+		{
+			"timestamps": {
+				"from": "00:42:28,360",
+				"to": "00:42:32,040"
+			},
+			"offsets": {
+				"from": 2548360,
+				"to": 2552040
+			},
+			"text": " And on an upcoming video I want to tackle from scratch as well."
+		},
+		{
+			"timestamps": {
+				"from": "00:42:32,040",
+				"to": "00:42:36,040"
+			},
+			"offsets": {
+				"from": 2552040,
+				"to": 2556040
+			},
+			"text": " Things like evaluation and making these systems work."
+		},
+		{
+			"timestamps": {
+				"from": "00:42:36,040",
+				"to": "00:42:39,160"
+			},
+			"offsets": {
+				"from": 2556040,
+				"to": 2559160
+			},
+			"text": " And I'll see you there. Thanks for watching. Don't forget to like and"
+		},
+		{
+			"timestamps": {
+				"from": "00:42:39,160",
+				"to": "00:42:43,480"
+			},
+			"offsets": {
+				"from": 2559160,
+				"to": 2563480
+			},
+			"text": " subscribe and see you next time. Cheers."
+		}
+	]
+}
